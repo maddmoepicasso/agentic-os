@@ -112,7 +112,7 @@ chmod +x install.sh && ./install.sh
 
 | Tool | Required? | Install |
 |------|-----------|---------|
-| Python 3.10+ | ✅ Required | `sudo apt install python3 python3-pip` |
+| Python 3.10+ | ✅ Required | Auto-installed via `uv` by `install.sh` |
 | Node.js 18+ | ⚠ For opencode | `curl -fsSL https://deb.nodesource.com/setup_20.x \| sudo bash - && sudo apt install -y nodejs` |
 | opencode | ⚠ For code tasks | `npm install -g @opencode/cli` |
 | Hermes Agent | ⚠ For memory/scheduling | `curl -fsSL https://raw.githubusercontent.com/NousResearch/hermes-agent/main/scripts/install.sh \| bash` |

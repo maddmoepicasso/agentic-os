@@ -23,9 +23,9 @@ PYTHON="$VENV_DIR/bin/python3"
 # Ensure deps are up to date
 UV="bin/uv"
 if [ -x "$UV" ]; then
-    "$UV" pip install --python "$PYTHON" -r requirements.txt --quiet 2>/dev/null
+    "$UV" pip install --python "$PYTHON" -r requirements.txt --quiet
 else
-    "$PYTHON" -m pip install -r requirements.txt --quiet 2>/dev/null
+    "$PYTHON" -m pip install -r requirements.txt --quiet
 fi
 
 # Get port from settings or default
