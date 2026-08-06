@@ -17,19 +17,41 @@ echo "Detected OS: $OS"
 if command -v python3 &>/dev/null; then
     echo "Python: $(python3 --version)"
 else
-    echo "ERROR: Python 3.10+ required. Install via: sudo apt install python3 python3-pip"
+    echo "ERROR: Python 3.10+ required. Install via: sudo apt install python3"
     exit 1
 fi
 
-# Check pip
-if ! command -v pip3 &>/dev/null; then
-    echo "Installing pip..."
-    python3 -m ensurepip --upgrade
+# Install uv into bin/ if not present
+BIN_DIR="bin"
+UV="$BIN_DIR/uv"
+if [ -x "$UV" ]; then
+    echo "uv: $($UV --version)"
+else
+    echo "Installing uv to $BIN_DIR/..."
+    mkdir -p "$BIN_DIR"
+    curl -LsSf https://astral.sh/uv/install.sh | env UV_INSTALL_DIR="$PWD/$BIN_DIR" sh
+    if [ ! -x "$UV" ]; then
+        echo "ERROR: uv installation failed. Install manually: curl -LsSf https://astral.sh/uv/install.sh | sh"
+        exit 1
+    fi
+    echo "uv: $($UV --version)"
+    # Remove shell helper scripts — we reference bin/uv directly
+    rm -f "$BIN_DIR/env" "$BIN_DIR/env.fish"
 fi
 
-# Install Python deps
+# Create virtual environment
+VENV_DIR=".venv"
+if [ -d "$VENV_DIR" ]; then
+    echo "Virtual environment already exists at $VENV_DIR/"
+else
+    echo "Creating virtual environment..."
+    "$UV" venv "$VENV_DIR"
+    echo "Created $VENV_DIR/"
+fi
+
+# Install Python deps into venv
 echo "Installing Python dependencies..."
-pip3 install -r requirements.txt --quiet
+"$UV" pip install --python "$VENV_DIR/bin/python3" -r requirements.txt --quiet
 
 # Check Node.js (for opencode)
 if command -v node &>/dev/null; then

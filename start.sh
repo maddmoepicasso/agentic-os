@@ -10,18 +10,31 @@ if [ ! -f server.py ]; then
     exit 1
 fi
 
-# Check dependencies
-pip3 install -r requirements.txt --quiet 2>/dev/null
+# Check virtual environment
+VENV_DIR=".venv"
+if [ ! -d "$VENV_DIR" ]; then
+    echo "Virtual environment not found. Run ./install.sh first."
+    exit 1
+fi
+
+# Use venv Python directly (no shell activation needed)
+PYTHON="$VENV_DIR/bin/python3"
+
+# Ensure deps are up to date
+UV="bin/uv"
+if [ -x "$UV" ]; then
+    "$UV" pip install --python "$PYTHON" -r requirements.txt --quiet 2>/dev/null
+else
+    "$PYTHON" -m pip install -r requirements.txt --quiet 2>/dev/null
+fi
 
 # Get port from settings or default
 PORT=8080
-if command -v python3 &>/dev/null; then
-    PORT=$(python3 -c "import json; f=open('data/settings.json'); d=json.load(f); print(d.get('dashboard',{}).get('port',8080)); f.close()" 2>/dev/null || echo "8080")
-fi
+PORT=$("$PYTHON" -c "import json; f=open('data/settings.json'); d=json.load(f); print(d.get('dashboard',{}).get('port',8080)); f.close()" 2>/dev/null || echo "8080")
 
 echo "Dashboard: http://127.0.0.1:${PORT}"
 echo "Press Ctrl+C to stop"
 echo ""
 
-# Start server
-python3 server.py --port "${PORT}"
+# Start server using venv Python
+"$PYTHON" server.py --port "${PORT}"
