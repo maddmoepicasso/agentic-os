@@ -45,7 +45,7 @@ if [ -d "$VENV_DIR" ]; then
     echo "Virtual environment already exists at $VENV_DIR/"
 else
     echo "Creating virtual environment..."
-    "$UV" venv "$VENV_DIR"
+    "$UV" venv "$VENV_DIR" --python 3.12
     echo "Created $VENV_DIR/"
 fi
 
