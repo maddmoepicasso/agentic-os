@@ -18,4 +18,5 @@ data/error-log.json
 data/circuit-breaker.json
 data/memory.db
 data/kanban/*.json
+data/uploads/
 scheduler/*.pyc

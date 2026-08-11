@@ -17,7 +17,7 @@ Checks system health at regular intervals: agent status, disk usage, memory pres
 - Before and after running other skills
 
 ## Process
-1. Check all 3 agents (opencode, hermes, gemini) are online
+1. Check all 3 agents (opencode, hermes, agy) are online
 2. Check disk usage (< 90%)
 3. Check memory pressure (< 80%)
 4. Scan recent audit log for errors

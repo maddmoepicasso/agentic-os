@@ -151,8 +151,16 @@ class CronScheduler:
             from apscheduler.schedulers.background import BackgroundScheduler as BS
             from apscheduler.triggers.cron import CronTrigger as CT
         except ImportError:
-            print("APScheduler not found. Run ./install.sh to install dependencies.")
-            return
+            print("APScheduler not found — auto-installing...")
+            try:
+                subprocess.check_call(
+                    [sys.executable, "-m", "pip", "install", "apscheduler", "--quiet"]
+                )
+                from apscheduler.schedulers.background import BackgroundScheduler as BS
+                from apscheduler.triggers.cron import CronTrigger as CT
+            except Exception as e:
+                print(f"Auto-install failed ({e}). Run: pip install apscheduler")
+                return
         self._scheduler = BS()
         self._reload_jobs()
         self._scheduler.start()

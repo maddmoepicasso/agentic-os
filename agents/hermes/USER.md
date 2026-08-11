@@ -2,7 +2,7 @@
 
 ## User
 - Name: User
-- Tech Stack: opencode, Hermes Agent, Gemini CLI, deepseek-v4-flash-free
+- Tech Stack: opencode, Hermes Agent, agy CLI, deepseek-v4-flash-free
 - Projects: CloudMart (GCP DevOps), Agentic OS
 - Budget: Free tiers only
 
@@ -13,5 +13,5 @@
 - Cost-conscious — always free tier first
 
 ## Communication
-- Primary interaction: CLI (opencode/Hermes/Gemini)
+- Primary interaction: CLI (opencode/Hermes/agy)
 - Channels: CLI, messaging (Telegram)

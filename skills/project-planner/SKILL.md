@@ -30,4 +30,4 @@ Spec document + task plan + implementation order
 
 ## Agent Assignment
 - Primary: opencode
-- Fallback: gemini
+- Fallback: agy

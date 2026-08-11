@@ -34,4 +34,4 @@ Structured review report with severity levels
 
 ## Agent Assignment
 - Primary: opencode
-- Fallback: gemini
+- Fallback: agy

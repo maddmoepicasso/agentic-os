@@ -36,5 +36,15 @@ echo "Dashboard: http://127.0.0.1:${PORT}"
 echo "Press Ctrl+C to stop"
 echo ""
 
+# Kill any stale process still bound to the port (from a crashed/previous run)
+if command -v lsof &>/dev/null; then
+    PIDS=$(lsof -ti:"${PORT}" 2>/dev/null || true)
+    if [ -n "${PIDS}" ]; then
+        echo "Port ${PORT} in use — stopping stale process(es): ${PIDS}"
+        kill -9 ${PIDS} 2>/dev/null || true
+        sleep 1
+    fi
+fi
+
 # Start server using venv Python
 "$PYTHON" server.py --port "${PORT}"

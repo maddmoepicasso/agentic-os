@@ -31,4 +31,4 @@ Structured plan with: goal, milestones, tasks, dependencies, estimates
 
 ## Agent Assignment
 - Primary: opencode
-- Fallback: gemini
+- Fallback: agy

@@ -79,9 +79,89 @@ def search(query: str, limit: int = 20) -> list:
             "WHERE memory_fts MATCH ? ORDER BY rank LIMIT ?",
             (query, limit)
         ).fetchall()
-        return [dict(r) for r in rows]
-    except sqlite3.OperationalError:
+    except Exception:
         return []
+    return [dict(r) for r in rows]
+
+def build_graph() -> dict:
+    """Build a knowledge graph from the FTS5 index + entity table (v0.4.0).
+
+    Nodes: brain files, skills, journal entries, extracted entities.
+    Edges: file->entity co-occurrence, entity co-occurrence in same source.
+    """
+    conn = _get_db()
+    nodes, edges = [], []
+    node_ids, edge_keys = set(), set()
+
+    # Document nodes (from memory_meta)
+    rows = conn.execute(
+        "SELECT id, source, path, title, category FROM memory_meta"
+    ).fetchall()
+    doc_by_id = {}
+    for r in rows:
+        node = {
+            "id": r["id"],
+            "label": r["title"] or r["path"],
+            "type": r["category"] or r["source"],
+            "path": r["path"],
+            "source": r["source"],
+        }
+        nodes.append(node)
+        node_ids.add(r["id"])
+        doc_by_id[r["id"]] = r["path"]
+
+    # Entity nodes
+    ents = conn.execute(
+        "SELECT DISTINCT name, type, source FROM entities LIMIT 200"
+    ).fetchall()
+    entity_ids = set()
+    for e in ents:
+        nid = f"ent:{e['name']}:{e['type']}"
+        if nid in entity_ids:
+            continue
+        entity_ids.add(nid)
+        nodes.append({
+            "id": nid,
+            "label": e["name"],
+            "type": f"entity:{e['type']}",
+            "path": "",
+            "source": e["source"] or "auto",
+        })
+
+    # Edges: document <-> entity co-occurrence
+    edge_rows = conn.execute(
+        "SELECT source, name, type FROM entities LIMIT 500"
+    ).fetchall()
+    ent_by_key = {}
+    for e in edge_rows:
+        key = f"ent:{e['name']}:{e['type']}"
+        ent_by_key.setdefault(e["source"], []).append(key)
+
+    # Edges between documents (same source directory / shared entity)
+    doc_sources = {}
+    for r in rows:
+        doc_sources.setdefault(r["source"], []).append(r["id"])
+
+    for source, ids in doc_sources.items():
+        for i in range(len(ids)):
+            for j in range(i + 1, len(ids)):
+                key = tuple(sorted((ids[i], ids[j])))
+                if key not in edge_keys:
+                    edge_keys.add(key)
+                    edges.append({"source": ids[i], "target": ids[j], "type": "shares_source"})
+
+    for source, ent_ids in ent_by_key.items():
+        # link each entity to the document it appeared in
+        for doc_id, doc_path in doc_by_id.items():
+            if doc_path and source and doc_path in source:
+                key = (doc_id, ent_ids[0])
+                if key not in edge_keys:
+                    edge_keys.add(key)
+                    for ent_id in ent_ids[:5]:
+                        edges.append({"source": doc_id, "target": ent_id, "type": "mentions"})
+
+    return {"nodes": nodes, "edges": edges,
+            "stats": {"nodes": len(nodes), "edges": len(edges)}}
 
 def index_brain_files():
     brain_dir = BASE_DIR

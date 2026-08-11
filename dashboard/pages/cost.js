@@ -80,6 +80,16 @@ async function renderCost() {
       `);
     }
 
+    // Load Chart.js lazily (CDN only needed on this page)
+    if (entries.length > 0) {
+      const ok = await loadChartJS();
+      if (!ok) {
+        document.querySelector('.chart-container')?.insertAdjacentHTML('beforebegin',
+          '<div class="card mb-3" style="border-color:var(--yellow)"><div class="empty-state" style="padding:16px"><div class="empty-state-icon">📉</div><div class="empty-state-title">Charts unavailable</div><div class="empty-state-desc">Chart.js CDN could not be loaded. Check your internet connection.</div></div></div>');
+        return;
+      }
+    }
+
     // Build agent chart
     const agentTotals = {};
     entries.forEach(e => {
@@ -115,11 +125,22 @@ async function renderCost() {
   }
 }
 
+function loadChartJS() {
+  return new Promise((resolve) => {
+    if (window.Chart) { resolve(true); return; }
+    const script = document.createElement('script');
+    script.src = 'https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js';
+    script.onload = () => resolve(true);
+    script.onerror = () => resolve(false);
+    document.body.appendChild(script);
+  });
+}
+
 async function recordTestCost() {
   showModal('Record Cost Entry', `
     <div class="form-group">
       <label class="form-label">Agent</label>
-      <select id="rcAgent" class="form-select"><option>opencode</option><option>hermes</option><option>gemini</option></select>
+      <select id="rcAgent" class="form-select"><option>opencode</option><option>hermes</option><option>agy</option></select>
     </div>
     <div class="form-group">
       <label class="form-label">Model</label>

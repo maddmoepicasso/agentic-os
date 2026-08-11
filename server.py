@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 Agentic OS — FastAPI Backend
-Multi-agent orchestration server for opencode, Hermes, Gemini CLI
+Multi-agent orchestration server for opencode, Hermes, agy CLI
 """
 import argparse
 import json
@@ -18,7 +18,7 @@ from typing import Optional
 
 from contextlib import asynccontextmanager
 
-from fastapi import FastAPI, HTTPException, Query
+from fastapi import FastAPI, HTTPException, Query, UploadFile, File, Form
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import HTMLResponse, JSONResponse, Response
 from fastapi.staticfiles import StaticFiles
@@ -43,7 +43,7 @@ async def lifespan(app: FastAPI):
         except Exception:
             pass
 
-app = FastAPI(title="Agentic OS", version="1.1.0", lifespan=lifespan)
+app = FastAPI(title="Agentic OS", version="0.4.0", lifespan=lifespan)
 
 # Load OpenRouter API key from Hermes .env
 HERMES_ENV = Path.home() / ".hermes" / ".env"
@@ -63,6 +63,22 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+# No-cache for dashboard assets — SPA JS is loaded on demand and updated
+# frequently during development (v0.4.0). Prevents stale-cached pages.
+from starlette.middleware.base import BaseHTTPMiddleware
+
+class NoCacheMiddleware(BaseHTTPMiddleware):
+    async def dispatch(self, request, call_next):
+        response = await call_next(request)
+        path = request.url.path
+        if path.startswith("/dashboard") or path in ("/", "/index.html"):
+            response.headers["Cache-Control"] = "no-store, no-cache, must-revalidate"
+            response.headers["Pragma"] = "no-cache"
+            response.headers["Expires"] = "0"
+        return response
+
+app.add_middleware(NoCacheMiddleware)
 
 BASE_DIR = Path(__file__).parent.resolve()
 
@@ -190,12 +206,9 @@ def check_agent(name: str) -> dict:
         elif name == "hermes":
             exists = shutil.which("hermes") is not None
             status = "online" if exists else "offline"
-        elif name == "gemini":
-            # Gemini has valid OAuth tokens logged in
-            oauth = Path.home() / ".gemini" / "oauth_creds.json"
-            exists = shutil.which("gemini") is not None
-            logged_in = oauth.exists() and "ya29" in oauth.read_text()
-            status = "online" if exists and logged_in else "offline" if not exists else "warning"
+        elif name == "agy":
+            exists = shutil.which("agy") is not None
+            status = "online" if exists else "offline"
         else:
             status = "offline"
     except Exception:
@@ -206,8 +219,10 @@ def check_agent(name: str) -> dict:
 
 @app.get("/api/status")
 def get_status():
-    agents = [check_agent(a) for a in ["opencode", "hermes", "gemini"]]
-    skills = list_dir(BASE_DIR / "skills")
+    agents = [check_agent(a) for a in ["opencode", "hermes", "agy"]]
+    skills_dir = BASE_DIR / "skills"
+    skills = [d.name for d in skills_dir.iterdir()
+              if d.is_dir() and not d.name.startswith("_")] if skills_dir.exists() else []
     return {
         "status": "healthy",
         "agents": agents,
@@ -309,14 +324,14 @@ def run_skill(name: str, req: Optional[SkillRunRequest] = None):
         if any(k in name for k in devops_keywords):
             agent_choice = "opencode"
         elif any(k in name for k in research_keywords):
-            agent_choice = "gemini"
+            agent_choice = "agy"
         else:
             # Check SKILL.md for explicit agent assignment
             for line in skill_md.split('\n'):
                 line = line.strip()
                 if "Primary:" in line:
                     candidate = line.split(":")[-1].strip().lower()
-                    if candidate in ("opencode", "hermes", "gemini"):
+                    if candidate in ("opencode", "hermes", "agy"):
                         agent_choice = candidate
                         break
             if agent_choice == "auto":
@@ -620,6 +635,17 @@ def list_entities(entity_type: str = "", limit: int = Query(50, le=200)):
     from brain.memory_search import get_entities
     return {"entities": get_entities(entity_type=entity_type, limit=limit)}
 
+@app.get("/api/memory/graph")
+def memory_graph():
+    """Knowledge graph of memory files, skills, and extracted entities (v0.4.0)."""
+    try:
+        from brain.memory_search import build_graph
+        graph = build_graph()
+        append_audit({"action": "memory_graph_viewed", "nodes": graph["stats"]["nodes"]})
+        return graph
+    except Exception as e:
+        return {"nodes": [], "edges": [], "stats": {"nodes": 0, "edges": 0}, "error": str(e)}
+
 @app.post("/api/skills/generate")
 def generate_skill(data: dict):
     """Auto-generate a SKILL.md from a natural language description."""
@@ -726,7 +752,7 @@ def get_circuit_breaker():
 @app.post("/api/circuit-breaker/trip")
 def trip_circuit_breaker(data: dict):
     agent = data.get("agent", "")
-    if agent not in ["opencode", "hermes", "gemini"]:
+    if agent not in ["opencode", "hermes", "agy"]:
         raise HTTPException(400, "Invalid agent")
     state = _get_circuit_state()
     if agent not in state["agents"]:
@@ -743,7 +769,7 @@ def trip_circuit_breaker(data: dict):
 @app.post("/api/circuit-breaker/reset")
 def reset_circuit_breaker(data: dict):
     agent = data.get("agent", "")
-    if agent not in ["opencode", "hermes", "gemini"]:
+    if agent not in ["opencode", "hermes", "agy"]:
         raise HTTPException(400, "Invalid agent")
     state = _get_circuit_state()
     state["agents"][agent] = {"state": "closed", "failures": 0, "opened_at": None}
@@ -867,26 +893,17 @@ def execute_agent(agent: str, message: str) -> str:
                 return f"**Hermes needs setup**\n\nRun `hermes setup` or check your config.\n\n**Details:** {err_msg[:200]}"
             return err_msg or f"hermes returned exit code {code}"
 
-        elif agent == "gemini":
-            for attempt, (args, to) in enumerate([
-                (["-y", "-m", "gemini-2.5-flash"], 30),
-                (["-y"], 30),
-            ]):
-                try:
-                    code, out, err = run_cli(["gemini", *args, message], timeout=to)
-                except subprocess.TimeoutExpired:
-                    if attempt == 0:
-                        continue
-                    return f"**Gemini CLI timed out.**\n\nTry running `gemini \"{message[:60]}\"` directly."
-                combined = ((err or "") + " " + (out or "")).strip()
-                if code == 0:
-                    return (out or "").strip() or f"**Gemini CLI**\n\nProcessed your query.\n\n**Message:** {message}"
-                if attempt == 0 and ("model" in combined.lower() or "not found" in combined.lower()):
-                    continue
-                if "auth" in combined.lower() or "login" in combined.lower() or "Please set an Auth" in combined:
-                    return f"**Gemini needs auth**\n\nRun `gemini auth login` to authenticate.\n\n**Details:** {combined[:200]}"
-                return combined or f"gemini returned exit code {code}"
-            return "Gemini CLI did not return a response."
+        elif agent == "agy":
+            try:
+                code, out, err = run_cli(["agy", "--print", message], timeout=60)
+            except subprocess.TimeoutExpired:
+                return f"**agy timed out.**\n\nTry running `agy --print \"{message[:60]}\"` directly."
+            combined = ((err or "") + " " + (out or "")).strip()
+            if code == 0:
+                return (out or "").strip() or f"**agy**\n\nProcessed your query."
+            if "auth" in combined.lower() or "login" in combined.lower() or "api key" in combined.lower():
+                return f"**agy needs auth**\n\nRun `agy login` to authenticate.\n\n**Details:** {combined[:200]}"
+            return combined or f"agy returned exit code {code}"
 
         else:
             return f"Unknown agent: {agent}"
@@ -900,8 +917,8 @@ def execute_agent(agent: str, message: str) -> str:
 @app.post("/api/chat")
 def chat(req: ChatRequest):
     agent = req.agent.lower().strip()
-    if agent not in ["opencode", "hermes", "gemini"]:
-        raise HTTPException(400, "Agent must be one of: opencode, hermes, gemini")
+    if agent not in ["opencode", "hermes", "agy"]:
+        raise HTTPException(400, "Agent must be one of: opencode, hermes, agy")
     message = (req.message or "").strip()
     if not message:
         raise HTTPException(400, "Message cannot be empty")
@@ -933,8 +950,99 @@ def chat(req: ChatRequest):
     return {"status": "ok", "response": agent_msg}
 
 @app.get("/api/chat/history")
-def get_chat_history():
-    return load_chat_history()
+def get_chat_history(q: str = Query(""), agent: str = Query(""), limit: int = Query(200, le=1000)):
+    """Chat history with optional search/filter (v0.4.0)."""
+    history = load_chat_history()
+    messages = history.get("messages", [])
+    if q:
+        ql = q.lower()
+        messages = [m for m in messages if ql in m.get("content", "").lower()]
+    if agent:
+        messages = [m for m in messages if m.get("agent") == agent]
+    if limit:
+        messages = messages[-limit:]
+    return {"messages": messages, "total": len(messages), "query": q, "agent": agent}
+
+# ─── Routes: Chat File Attachments (v0.4.0) ─────────────────────────
+
+UPLOAD_DIR = BASE_DIR / "data" / "uploads"
+UPLOAD_MAX_BYTES = 2 * 1024 * 1024  # 2 MB
+UPLOAD_TTL_HOURS = 24
+ALLOWED_UPLOAD_EXTENSIONS = {
+    ".txt", ".md", ".log", ".json", ".yml", ".yaml", ".csv", ".py",
+    ".js", ".ts", ".sh", ".toml", ".ini", ".env", ".cfg", ".xml",
+    ".html", ".css", ".go", ".rs", ".sql", ".tsx", ".jsx",
+}
+
+def _cleanup_uploads(force: bool = False):
+    """Delete upload files older than the TTL (24h)."""
+    if not UPLOAD_DIR.exists():
+        return
+    now = time.time()
+    for f in UPLOAD_DIR.glob("*"):
+        try:
+            if force or now - f.stat().st_mtime > UPLOAD_TTL_HOURS * 3600:
+                f.unlink(missing_ok=True)
+        except OSError:
+            pass
+
+@app.post("/api/chat/upload")
+async def chat_upload(
+    agent: str = Form(...),
+    message: str = Form(""),
+    file: UploadFile = File(...),
+):
+    """Chat with an optional file attachment (multipart/form-data, v0.4.0)."""
+    agent = agent.lower().strip()
+    if agent not in ["opencode", "hermes", "agy"]:
+        raise HTTPException(400, "Agent must be one of: opencode, hermes, agy")
+
+    raw = await file.read(UPLOAD_MAX_BYTES + 1)
+    if len(raw) > UPLOAD_MAX_BYTES:
+        raise HTTPException(413, "File too large (max 2 MB)")
+    filename = (file.filename or "attachment.txt").strip().replace("\\", "/").split("/")[-1]
+    if not re.match(r"^[A-Za-z0-9._-]+$", filename):
+        raise HTTPException(400, "Invalid file name")
+    ext = Path(filename).suffix.lower()
+    if ext not in ALLOWED_UPLOAD_EXTENSIONS:
+        raise HTTPException(400, f"File type .{ext} not allowed")
+
+    _cleanup_uploads()
+    UPLOAD_DIR.mkdir(parents=True, exist_ok=True)
+    safe_name = f"{uuid.uuid4().hex[:8]}_{filename}"
+    upload_path = UPLOAD_DIR / safe_name
+    upload_path.write_bytes(raw)
+    append_audit({"action": "chat_upload", "file": filename, "size": len(raw)})
+
+    # Prepend file content to the message so the agent can read it
+    try:
+        text = raw.decode("utf-8", errors="replace")[:50000]
+    except Exception:
+        text = "[binary file — content not readable as text]"
+    attachment_block = f"--- File: {filename} ---\n{text}\n--- End {filename} ---"
+    message = (message or "").strip()
+    full_message = f"{attachment_block}\n\n{message}" if message else attachment_block
+
+    # Reuse the standard chat flow
+    user_msg = {
+        "id": str(uuid.uuid4())[:8],
+        "role": "user",
+        "agent": agent,
+        "content": full_message,
+        "timestamp": get_timestamp(),
+    }
+    save_chat_message(user_msg)
+    response_text = execute_agent(agent, full_message)
+    agent_msg = {
+        "id": str(uuid.uuid4())[:8],
+        "role": "assistant",
+        "agent": agent,
+        "content": response_text,
+        "timestamp": get_timestamp(),
+    }
+    save_chat_message(agent_msg)
+    append_audit({"action": "chat_message", "agent": agent, "msg_preview": (message or filename)[:50]})
+    return {"status": "ok", "response": agent_msg, "file": filename, "saved_as": safe_name}
 
 # ═══════════════════════════════════════════════════════════════════
 # v0.2.0 — New Feature Endpoints
@@ -1348,7 +1456,7 @@ def search_journal(q: str = Query("")):
 def get_agent_health():
     try:
         agents = []
-        for name in ["opencode", "hermes", "gemini"]:
+        for name in ["opencode", "hermes", "agy"]:
             info = check_agent(name)
             info["uptime"] = 0
             info["success_rate"] = 100
@@ -1361,7 +1469,7 @@ def get_agent_health():
 @app.get("/api/agents/{name}/stats")
 def get_agent_stats(name: str):
     try:
-        if name not in ["opencode", "hermes", "gemini"]:
+        if name not in ["opencode", "hermes", "agy"]:
             raise HTTPException(400, "Invalid agent")
         info = check_agent(name)
         return {
@@ -1382,7 +1490,7 @@ def get_agent_stats(name: str):
 def refresh_agent_health():
     try:
         agents = []
-        for name in ["opencode", "hermes", "gemini"]:
+        for name in ["opencode", "hermes", "agy"]:
             info = check_agent(name)
             agents.append(info)
         append_audit({"action": "agent_health_refreshed"})
@@ -1395,7 +1503,7 @@ def refresh_agent_health():
 ROUTER_RULES = {
     "opencode": ["code", "devops", "deploy", "git", "file", "terraform", "docker", "test", "build", "infra", "script"],
     "hermes": ["memory", "schedule", "channel", "skill", "cron", "reminder", "brain", "plugin", "backup"],
-    "gemini": ["research", "analyze", "search", "compare", "explain", "study", "learn", "document", "report", "review"],
+    "agy": ["research", "analyze", "search", "compare", "explain", "study", "learn", "document", "report", "review"],
 }
 
 @app.post("/api/router/suggest")
@@ -1420,7 +1528,7 @@ def router_suggest(data: RouterSuggest):
 def router_route(data: RouterRoute):
     try:
         agent = data.agent.lower()
-        if agent not in ["opencode", "hermes", "gemini"]:
+        if agent not in ["opencode", "hermes", "agy"]:
             return {"status": "error", "message": f"Invalid agent: {agent}"}
         append_audit({"action": "task_routed", "agent": agent, "task_preview": data.task[:50]})
         return {
@@ -1532,6 +1640,36 @@ def get_session_replay(session_id: str):
     except Exception as e:
         return {"session_id": session_id, "messages": [], "error": str(e)}
 
+# ─── Routes: Code Diff Viewer (v0.4.0) ─────────────────────────────
+
+DIFF_ALLOWED_PREFIXES = (
+    "brain/", "skills/", "server.py", "scheduler/", "dashboard/",
+    "prompts/", "standards/", "agents/", "data/", "registry/", "tests/",
+)
+
+@app.get("/api/diff")
+def get_diff(file: str = Query(""), ref: str = Query("HEAD")):
+    """Unified git diff for a file in the repo (v0.4.0)."""
+    try:
+        if not file:
+            raise HTTPException(400, "Query parameter 'file' is required")
+        # Prevent traversal — allow only repo-relative paths
+        resolved = (BASE_DIR / file).resolve()
+        if not str(resolved).startswith(str(BASE_DIR.resolve()) + os.sep) and resolved != BASE_DIR:
+            raise HTTPException(400, "Invalid file path")
+        if not resolved.exists():
+            raise HTTPException(404, "File not found")
+        rel = str(resolved.relative_to(BASE_DIR))
+        code, out, err = run_cli(["git", "-C", str(BASE_DIR), "diff", ref, "--", rel], timeout=10)
+        if code == 0 and not out.strip():
+            # no diff against ref — try working tree vs index
+            return {"file": rel, "diff": "", "changed": False, "ref": ref}
+        return {"file": rel, "diff": out or err, "changed": bool(out.strip()), "ref": ref}
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(500, str(e))
+
 # ─── Routes: Dashboard Static Files ──────────────────────────────
 
 dashboard_dir = BASE_DIR / "dashboard"
@@ -1543,13 +1681,30 @@ def index():
     html_file = BASE_DIR / "dashboard" / "index.html"
     if html_file.exists():
         content = html_file.read_text()
-        content = content.replace('href="styles.css"', 'href="/dashboard/styles.css"')
-        content = content.replace('src="utils.js"', 'src="/dashboard/utils.js"')
-        content = content.replace('src="api.js"', 'src="/dashboard/api.js"')
-        content = content.replace('src="app.js"', 'src="/dashboard/app.js"')
+        # Version-agnostic rewrite: handle any ?v= suffix (or none) so both
+        # freshly-served and previously-cached index.html resolve correctly.
+        content = re.sub(r'href="(styles\.css)(\?v=[0-9.]+)?"',
+                         r'href="/dashboard/styles.css\2"', content)
+        for name in ("utils.js", "api.js", "app.js"):
+            content = re.sub(rf'src="{name}(?:\?v=[0-9.]+)?"',
+                             rf'src="/dashboard/{name}"', content)
         content = content.replace('pages/', '/dashboard/pages/')
         return HTMLResponse(content=content)
     return HTMLResponse("<h1>Agentic OS</h1><p>Dashboard not built yet. Run <code>./install.sh</code> first.</p>")
+
+# Root-level fallbacks so stale cached index.html (which references
+# root-relative core assets) still resolves even when /dashboard rewrite
+# hasn't been seen by the browser (v0.4.1).
+for _asset in ("styles.css", "utils.js", "api.js", "app.js"):
+
+    def _serve_asset(asset=_asset):
+        f = BASE_DIR / "dashboard" / asset
+        if not f.exists():
+            raise HTTPException(404, "Not found")
+        media = "text/css" if asset.endswith(".css") else "application/javascript"
+        return Response(content=f.read_bytes(), media_type=media)
+
+    app.add_api_route(f"/{_asset}", _serve_asset)
 
 # ─── Favicon ──────────────────────────────────────────────────────
 

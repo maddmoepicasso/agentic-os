@@ -43,7 +43,7 @@
     {
       "name": "research-synthesis",
       "version": "1.0.0",
-      "description": "Web research and synthesis via Gemini CLI",
+      "description": "Web research and synthesis via agy CLI",
       "author": "Agentic OS",
       "installed": "2026-05-17T00:00:00Z",
       "type": "built-in"

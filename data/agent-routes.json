@@ -12,7 +12,7 @@
     },
     {
       "pattern": "research|analyze|search|summarize|compare|investigate|learn",
-      "target": "gemini",
+      "target": "agy",
       "priority": 10
     },
     {
@@ -25,7 +25,7 @@
   "agent_capabilities": {
     "opencode": ["code_generation", "file_operations", "git_management", "terminal_execution", "infrastructure_as_code", "testing", "debugging"],
     "hermes": ["persistent_memory", "scheduled_tasks", "messaging_channels", "skill_hub", "voice", "browser_automation", "subagent_delegation"],
-    "gemini": ["web_search", "multi_modal_analysis", "document_understanding", "data_analysis", "research_synthesis", "reasoning"]
+    "agy": ["web_search", "multi_modal_analysis", "document_understanding", "data_analysis", "research_synthesis", "reasoning"]
   },
   "handoff_protocol": {
     "enabled": true,

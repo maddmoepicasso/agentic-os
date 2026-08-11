@@ -30,4 +30,4 @@ Design document with: problem statement, alternatives, evaluation, recommendatio
 
 ## Agent Assignment
 - Primary: opencode
-- Research: gemini
+- Research: agy

@@ -123,6 +123,7 @@ const PAGE_TITLES = {
   settings: { title: 'Settings', breadcrumb: 'Configuration' },
   'setup-wizard': { title: 'Setup Wizard', breadcrumb: 'Guided configuration' },
   chat: { title: 'AI Chat', breadcrumb: 'Multi-agent terminal' },
+  history: { title: 'Chat History', breadcrumb: 'Browse & replay conversations' },
   errors: { title: 'Error Dashboard', breadcrumb: 'System errors & circuit breaker' },
   kanban: { title: 'Kanban Board', breadcrumb: 'Multi-agent task management' },
   goals: { title: 'Goals', breadcrumb: 'Project targets and progress' },

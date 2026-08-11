@@ -75,11 +75,11 @@ else
     echo "WARNING: Hermes Agent not found. Install via: curl -fsSL https://raw.githubusercontent.com/NousResearch/hermes-agent/main/scripts/install.sh | bash"
 fi
 
-# Check Gemini CLI
-if command -v gemini &>/dev/null; then
-    echo "Gemini CLI: found"
+# Check agy (Antigravity CLI)
+if command -v agy &>/dev/null; then
+    echo "agy (Antigravity): found"
 else
-    echo "WARNING: Gemini CLI not found. Install via: npm install -g @google/gemini-cli"
+    echo "WARNING: agy CLI not found. Install via: curl -fsSL https://antigravity.ai/install | bash"
 fi
 
 # Create required directories

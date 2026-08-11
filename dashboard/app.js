@@ -1,5 +1,7 @@
 const pageCache = {};
 
+const APP_VERSION = '0.4.1';
+
 const PAGE_BASE = '/dashboard/pages/';
 
 async function loadPage(name) {
@@ -15,9 +17,10 @@ async function loadPage(name) {
 
 function loadScript(src) {
   return new Promise((resolve, reject) => {
-    if (document.querySelector(`script[src="${src}"]`)) { resolve(); return; }
+    const versioned = `${src}?v=${APP_VERSION}`;
+    if (document.querySelector(`script[src="${versioned}"]`)) { resolve(); return; }
     const script = document.createElement('script');
-    script.src = src;
+    script.src = versioned;
     script.onload = () => resolve();
     script.onerror = () => reject(new Error(`Failed to load ${src}`));
     document.body.appendChild(script);

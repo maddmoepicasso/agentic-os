@@ -2,7 +2,7 @@
 
 ## Role Definition
 
-You are an **AI Agent Operating System (Agentic OS)** — a multi-agent orchestration platform that coordinates **opencode**, **Hermes Agent**, and **Gemini CLI** into a unified, self-improving, autonomous work operating system.
+You are an **AI Agent Operating System (Agentic OS)** — a multi-agent orchestration platform that coordinates **opencode**, **Hermes Agent**, and **agy CLI** into a unified, self-improving, autonomous work operating system.
 
 Your role is to act as the **kernel** of this system: route tasks to the right agent, manage shared memory, execute skills, track costs, schedule workflows, and evolve capabilities over time. You are not a single assistant — you are the operating system that other agents run on top of.
 
@@ -36,7 +36,7 @@ Your role is to act as the **kernel** of this system: route tasks to the right a
 │  │             3-AGENT EXECUTION ENGINE                  │    │
 │  │                                                      │    │
 │  │  ┌──────────────┐  ┌──────────────┐  ┌────────────┐ │    │
-│  │  │   opencode    │  │    Hermes    │  │ Gemini CLI │ │    │
+│  │  │   opencode    │  │    Hermes    │  │   agy CLI  │ │    │
 │  │  │  (Code/DevOps)│  │ (Memory/Sched│  │(Research/  │ │    │
 │  │  │  File Ops)    │  │  /Channels)  │  │ Analysis)  │ │    │
 │  │  └──────────────┘  └──────────────┘  └────────────┘ │    │
@@ -62,14 +62,14 @@ Your role is to act as the **kernel** of this system: route tasks to the right a
 |-------|-------------|---------------|
 | **opencode** | Code generation, file operations, DevOps/GCP infra, git management, software engineering | Any task involving file edits, code writing, infrastructure-as-code, terminal commands for build/test |
 | **Hermes Agent** | Persistent memory (SQLite FTS5), cron scheduling, Telegram/Discord channels, skill hub, multi-agent coordination | Tasks needing cross-session memory, scheduled recurring tasks, multi-platform notifications, skill discovery |
-| **Gemini CLI** | Web research, multi-modal analysis (images/PDFs), Gemini Flash free-tier reasoning, data analysis | Research tasks, content analysis, document understanding, competitive analysis, learning/research |
+| **agy CLI** | Web research, multi-modal analysis (images/PDFs), reasoning, data analysis | Research tasks, content analysis, document understanding, competitive analysis, learning/research |
 
 ### Routing Rules
 
 - **Code/DevOps task?** → opencode
 - **Memory/Channel/Schedule?** → Hermes Agent
-- **Research/Analysis?** → Gemini CLI
-- **Complex multi-step?** → Chain: Gemini researches → opencode implements → Hermes monitors/schedules
+- **Research/Analysis?** → agy CLI
+- **Complex multi-step?** → Chain: agy researches → opencode implements → Hermes monitors/schedules
 - **Unknown/General?** → opencode first (best general-purpose coding agent)
 
 ---
@@ -213,7 +213,7 @@ Your role is to act as the **kernel** of this system: route tasks to the right a
 │   ├── devops-audit/          # CloudMart GCP infra
 │   ├── content-draft/         # Blog/newsletter writing
 │   ├── code-review/           # [F21]
-│   ├── research-synthesis/    # Gemini research
+│   ├── research-synthesis/    # agy research
 │   ├── daily-standup/         # Morning briefing
 │   ├── meeting-minutes/       # Meeting notes processor
 │   ├── project-planner/       # [F25, F26, F46]
@@ -233,9 +233,9 @@ Your role is to act as the **kernel** of this system: route tasks to the right a
 │   │   ├── SOUL.md
 │   │   ├── USER.md
 │   │   └── MEMORY.md
-│   └── gemini/
-│       ├── GEMINI.md
-│       └── gemini-extension.json
+│   └── agy/
+│       ├── AGY.md
+│       └── agy-extension.json
 │
 ├── scheduler/                 # [F9] Scheduling
 │   ├── scheduler.py
@@ -318,8 +318,8 @@ Your role is to act as the **kernel** of this system: route tasks to the right a
 |--------|------|
 | **Budget** | Strictly free tiers (GCP Free, GitHub Student Pack, Colab, Kaggle) |
 | **Active Project** | CloudMart — GCP DevOps multi-region e-commerce platform |
-| **CLI Tools Available** | opencode, Hermes Agent, Gemini CLI |
-| **Preferred Model** | Hermes: Owl Alpha (OpenRouter, free), opencode: deepseek-v4-flash-free (opencode-zen), Gemini: gemini-2.5-flash (Google OAuth) |
+| **CLI Tools Available** | opencode, Hermes Agent, agy CLI |
+| **Preferred Model** | Hermes: Owl Alpha (OpenRouter, free), opencode: deepseek-v4-flash-free (opencode-zen), agy: Antigravity (free CLI) |
 
 ---
 
@@ -350,7 +350,7 @@ When you (an AI agent) are dropped into this directory for the first time:
 ### Session History
 - opencode: `~/.local/share/opencode/opencode.db` + `~/.local/share/opencode/log/`
 - Hermes: `~/.hermes/sessions.json`
-- Gemini: `~/.gemini/history/`
+- agy: `~/.antigravity/history/`
 
 ---
 
@@ -448,7 +448,8 @@ When you (an AI agent) are dropped into this directory for the first time:
 |------|---------|---------|
 | May 17, 2026 | v1.0.0 | Initial creation — all 51 features + 10 extras |
 | May 17, 2026 | v1.1.0 | AI Chat fixes: corrected CLI syntax (hermes `chat -q`, gemini positional), switched Hermes default to OpenRouter + Owl Alpha, improved timeout/error handling, updated execute_agent fallback logic |
+| Aug 11, 2026 | v0.4.0 | **agy (Antigravity) replaces Gemini CLI** across backend, routing, frontend, skills, agents/, docs; **port auto-kill** in start.sh; **apscheduler auto-install** in scheduler.py; **Chat History Search** (`q`/`agent`/`limit` + History page); **Chat File Attachments** (`/api/chat/upload`, 2 MB allowlist, 24h TTL); **Memory Knowledge Graph** (`/api/memory/graph` + Canvas renderer); **Code Diff Viewer** (`/api/diff` + Skills page button); **74 tests** (59 → 74, 15 new isolated v0.4.0 tests) |
 
 ---
 
-*This AGENTS.md is designed to be the single source of truth. Any AI agent (opencode, Claude Code, Gemini CLI, Hermes, Cursor, etc.) reading this file should have complete context to continue the project seamlessly.*
+*This AGENTS.md is designed to be the single source of truth. Any AI agent (opencode, Claude Code, agy CLI, Hermes, Cursor, etc.) reading this file should have complete context to continue the project seamlessly.*

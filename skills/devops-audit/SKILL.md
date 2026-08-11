@@ -29,4 +29,4 @@ Structured audit report markdown in context/ folder
 
 ## Agent Assignment
 - Primary: opencode
-- Fallback: gemini
+- Fallback: agy

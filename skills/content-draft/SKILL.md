@@ -20,7 +20,7 @@ Drafts blog posts, newsletter issues, documentation, and other written content. 
 ## Process
 1. Read business-brain.md for brand voice
 2. Review input topic and desired format
-3. Research if needed (via Gemini CLI)
+3. Research if needed (via agy CLI)
 4. Draft content in appropriate tone
 5. Self-review against eval criteria
 6. Output to context/ folder
@@ -30,4 +30,4 @@ Draft markdown file with metadata (word count, reading time, tone)
 
 ## Agent Assignment
 - Primary: opencode
-- Research: gemini
+- Research: agy

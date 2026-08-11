@@ -4,8 +4,8 @@
   <img src="https://img.shields.io/badge/python-3.10+-blue.svg" alt="Python 3.10+"/>
   <img src="https://img.shields.io/badge/FastAPI-0.115+-green.svg" alt="FastAPI"/>
   <img src="https://img.shields.io/badge/agents-3-orange.svg" alt="3 Agents"/>
-  <img src="https://img.shields.io/badge/skills-16-purple.svg" alt="16 Skills"/>
-  <img src="https://img.shields.io/badge/version-v0.3.0-blueviolet.svg" alt="v0.3.0"/>
+  <img src="https://img.shields.io/badge/skills-15-purple.svg" alt="15 Skills"/>
+  <img src="https://img.shields.io/badge/version-v0.4.0-blueviolet.svg" alt="v0.4.0"/>
   <img src="https://img.shields.io/badge/status-stable-brightgreen.svg" alt="Status: Stable"/>
   <a href="https://dev.to/mihir_nmodi_14a06a4019e1/i-built-an-open-source-agent-os-2h30"><img src="https://img.shields.io/badge/dev.to-article-blue.svg" alt="dev.to article"/></a>
   <br/><br/>
@@ -13,7 +13,7 @@
 
 # Agentic OS (agentic-os) 🧠 — Multi-Agent Orchestration Platform
 
-A locally-hosted operating system for AI agents — an open-source GitHub repository — that coordinates **opencode**, **Hermes Agent**, and **Gemini CLI** into a unified dashboard with persistent memory, cron scheduling, skill execution, cost analytics, and disaster recovery.
+A locally-hosted operating system for AI agents — an open-source GitHub repository — that coordinates **opencode**, **Hermes Agent**, and **agy CLI** into a unified dashboard with persistent memory, cron scheduling, skill execution, cost analytics, and disaster recovery.
 
 > **Why Agentic OS?** Most agent tools work in isolation — a terminal for coding, a separate chat for research, another for memory. Agentic OS is the **control plane** that unifies them: one dashboard, one memory layer, one scheduler, one skill hub. Three agents, infinite capabilities.
 
@@ -23,8 +23,8 @@ A locally-hosted operating system for AI agents — an open-source GitHub reposi
 
 | Category | Features |
 |----------|----------|
-| **🤖 3-Agent Engine** | opencode (code/DevOps), Hermes (memory/scheduling), Gemini (research/analysis) with intelligent routing |
-| **🧩 16+ Skills** | Executable skill packs with eval scoring, learnings, and score history per run |
+| **🤖 3-Agent Engine** | opencode (code/DevOps), Hermes (memory/scheduling), agy (research/analysis) with intelligent routing |
+| **🧩 15+ Skills** | Executable skill packs with eval scoring, learnings, and score history per run |
 | **🧠 Persistent Memory** | SQLite FTS5 + `brain/` folder — shared context read by all agents at session start |
 | **⏱ Cron Scheduler** | APScheduler-powered jobs — heartbeat, memory consolidation, daily standup, DevOps audit |
 | **💰 Cost Analytics** | Track spending per provider, model, agent. Free-tier alerts prevent surprise bills |
@@ -34,11 +34,11 @@ A locally-hosted operating system for AI agents — an open-source GitHub reposi
 | **📐 Standards System** | Discover and inject coding conventions across your project |
 | **🔌 Plugin Registry** | Marketplace-style plugin management (extensible via skills) |
 | **🎨 Dark/Light Theme** | GitHub-style dark mode + clean light theme, toggle from sidebar |
-| **⚡ Zero API Costs** | Built for free tiers — Gemini Flash, OpenRouter free models, local opencode |
+| **⚡ Zero API Costs** | Built for free tiers — Antigravity (agy), OpenRouter free models, local opencode |
 | **📋 Kanban Board** | Visual task management — drag-and-drop columns, priority/status filtering, block/unblock, detail view |
 | **🎯 Goals** | Project targets with progress tracking, auto-syncs to `brain/active-projects.md` |
 | **📓 Journal** | Daily markdown entries stored as `brain/journal/YYYY-MM-DD.md` with full-text search |
-| **❤️ Agent Health** | Real-time monitoring of opencode, Hermes, and Gemini CLI availability |
+| **❤️ Agent Health** | Real-time monitoring of opencode, Hermes, and agy CLI availability |
 | **🧭 Smart Router** | Keyword-based task routing with confidence scoring — suggests best agent for any task |
 | **📊 Learning Analytics** | Skill evaluation scores, performance trends, and historical charts |
 | **🎬 Session Replay** | Browse and replay past opencode sessions from the dashboard |
@@ -61,7 +61,7 @@ A locally-hosted operating system for AI agents — an open-source GitHub reposi
 ├──────────────────────────────────────────────────────────────┤
 │                                                                                                                             │
 │  ┌───────────────┐  ┌────────────────┐  ┌────────────────────┐    │
-│  │    opencode            │  │    Hermes                │  │    Gemini CLI                   │    │
+│  │    opencode            │  │    Hermes                │  │    agy CLI                      │    │
 │  │  (Code/DevOps)     │  │ (Memory/Sched)    │  │   (Research/Analy)          │    │
 │  │   File Ops)              │  │  /Channels)             │  │                                        │    │
 │  └───────────────┘  └────────────────┘  └────────────────────┘    │
@@ -85,14 +85,14 @@ A locally-hosted operating system for AI agents — an open-source GitHub reposi
 |-------|------|---------------|----------|------|
 | **opencode** | Code generation, DevOps, file operations | deepseek-v4-flash-free | opencode-zen | **$0** |
 | **Hermes Agent** | Persistent memory, scheduling, messaging | Owl Alpha (1M ctx) | OpenRouter | **$0** |
-| **Gemini CLI** | Web research, multi-modal analysis | gemini-2.5-flash | Google OAuth | **$0** |
+| **agy CLI** | Web research, multi-modal analysis | Antigravity | agy CLI | **$0** |
 
 ### Routing Rules
 
 - **Code/DevOps task?** → opencode
 - **Memory/Channel/Schedule?** → Hermes Agent
-- **Research/Analysis?** → Gemini CLI
-- **Complex multi-step?** → Chain: Gemini researches → opencode implements → Hermes monitors/schedules
+- **Research/Analysis?** → agy CLI
+- **Complex multi-step?** → Chain: agy researches → opencode implements → Hermes monitors/schedules
 
 ---
 
@@ -116,7 +116,7 @@ chmod +x install.sh && ./install.sh
 | Node.js 18+ | ⚠ For opencode | `curl -fsSL https://deb.nodesource.com/setup_20.x \| sudo bash - && sudo apt install -y nodejs` |
 | opencode | ⚠ For code tasks | `npm install -g @opencode/cli` |
 | Hermes Agent | ⚠ For memory/scheduling | `curl -fsSL https://raw.githubusercontent.com/NousResearch/hermes-agent/main/scripts/install.sh \| bash` |
-| Gemini CLI | ⚠ For Google AI | `npm install -g @google/gemini-cli` |
+| agy CLI | ⚠ For research/analysis | `curl -fsSL https://antigravity.ai/install \| bash` |
 
 > ⚠ = Optional — the dashboard works with any subset of installed agents.
 
@@ -130,10 +130,10 @@ chmod +x install.sh && ./install.sh
 echo 'OPENROUTER_API_KEY=sk-or-v1-your-key-here' > ~/.hermes/.env
 ```
 
-### Gemini CLI (Google OAuth)
+### agy CLI (Antigravity)
 ```bash
-gemini auth login
-# Complete OAuth in browser — tokens saved to ~/.gemini/oauth_creds.json
+agy login
+# Authenticate to enable web research, analysis, and document understanding
 ```
 
 ### Dashboard Settings
@@ -142,7 +142,7 @@ Edit `data/settings.json`:
 {
   "dashboard": { "port": 8080 },
   "theme": "dark",
-  "agents": { "opencode": true, "hermes": true, "gemini": true }
+  "agents": { "opencode": true, "hermes": true, "agy": true }
 }
 ```
 
@@ -164,11 +164,12 @@ agentic-os/
 │   ├── api.js             # API client (all endpoints)
 │   ├── styles.css         # Full dark/light theme CSS
 │   ├── utils.js           # Shared utilities
-│   └── pages/             # 21 page modules (13 original + 7 v0.2.0 + 1 v0.3.0)
+│   └── pages/             # 22 page modules (13 original + 7 v0.2.0 + 1 v0.3.0 + 1 v0.4.0)
 │       ├── dashboard.js   # Overview with stats
 │       ├── skills.js      # Skill grid/list/detail
-│       ├── memory.js      # Brain file editor
-│       ├── chat.js        # Multi-agent chat
+│       ├── memory.js      # Brain file editor + Knowledge Graph
+│       ├── chat.js        # Multi-agent chat + file attachments
+│       ├── history.js     # ▸ Chat History Search (v0.4.0)
 │       ├── scheduler.js   # Cron job manager
 │       ├── audit.js       # Activity trail
 │       ├── cost.js        # Cost analytics charts
@@ -197,12 +198,12 @@ agentic-os/
 │   ├── constitution.md
 │   └── journal/           # Daily markdown entries (YYYY-MM-DD.md)
 │
-├── skills/                # 16 executable skills
+├── skills/                # 15 executable skills
 │   ├── devops-audit/      # GCP/CloudMart infra audit
 │   ├── heartbeat/         # 5-min health check
 │   ├── content-draft/     # Blog/newsletter writing
 │   ├── code-review/       # PR review checklist
-│   ├── research-synthesis/ # Gemini research aggregator
+│   ├── research-synthesis/ # agy research aggregator
 │   ├── daily-standup/     # Morning briefing
 │   ├── meeting-minutes/   # Notes processor
 │   ├── project-planner/   # Step-by-step plans
@@ -215,15 +216,35 @@ agentic-os/
 │   ├── goal-planner/      # Goal → steps
 │   └── _template/         # Starter template
 │
-├── agents/                # Per-agent configs
+├── agents/                # Per-agent configs (opencode, hermes, agy)
 ├── scheduler/jobs/        # Cron job definitions
 ├── registry/              # Plugin marketplace
 ├── standards/             # Discover/inject conventions
 ├── prompts/               # 10 reusable templates
-├── data/                  # Runtime data (agent-routes.json tracked; settings/cost/chat/error/scheduler/memory/circuit/kanban gitignored)
+├── data/                  # Runtime data (agent-routes.json tracked; settings/cost/chat/error/scheduler/memory/circuit/kanban/uploads gitignored)
 ├── audit/                 # Activity log (gitignored)
 └── backups/               # Snapshots (gitignored)
 ```
+
+---
+
+## 🆕 What's New in v0.4.0
+
+| Feature | Description |
+|---------|-------------|
+| **🤖 agy (Antigravity) replaces Gemini CLI** | Full provider swap across backend, routing, frontend, skills, agents/, and docs. `data/agent-routes.json`, circuit breaker, health checks, chat all use `agy` |
+| **🛡 Port Conflict Auto-Kill** | `start.sh` detects a stale dashboard process on the target port and kills it before starting |
+| **📦 Auto-Install apscheduler** | `scheduler.py` auto-installs missing dependencies instead of failing on startup |
+| **💬 Chat History Search** | `/api/chat/history` supports `q`, `agent`, `limit` filters + a dedicated History page with search, agent filter pills, and date grouping |
+| **📎 Chat File Attachments** | `POST /api/chat/upload` (multipart) accepts text files up to 2 MB (validated allowlist), previews content to the agent, and stores under `data/uploads/` with 24h TTL cleanup |
+| **🕸 Memory Knowledge Graph** | `GET /api/memory/graph` returns nodes (brain/skills/journal docs + extracted entities) and edges (shares_source / mentions), rendered as an interactive Canvas graph in the Memory page |
+| **📜 Code Diff Viewer** | `GET /api/diff?file=&ref=` returns unified git diff with repo-relative path-traversal protection; "View Diff" button on the Skills page |
+| **🧪 15 new tests** | Suite grows from 59 → 74 isolated tests covering chat history, uploads, memory graph, and diff viewer |
+| **🛠 Stale-Cache Elimination** | `no-store` cache headers on all dashboard assets, `?v=` cache-busting, service-worker purge on load, root-level asset fallbacks so stale index.html never breaks the UI |
+| **📐 Zoom-Proof Layout** | Content width capped at 1600px, responsive file-card grid, and `flex-shrink: 0` on tab bars — layout stays clean from 60% to 100% zoom |
+| **🔢 Correct Skill Count** | Skills badge now counts skill directories (15) via the status endpoint instead of returning 0 |
+
+During the v0.4.0 hardening pass the following **layout & caching bugs** were crushed: tab bars (Files/Knowledge Graph, Grid/List) collapsing to 1px under content at certain zooms, oversized cards stretching to 3500px+ at 50% zoom, cached index.html referencing dead asset URLs, and the sidebar Skills badge showing 0.
 
 ---
 
@@ -259,7 +280,7 @@ agentic-os/
 | **📋 Kanban Board** | Visual task management with 6 columns (triage → todo → ready → in_progress → blocked → done), drag-and-drop, priority labels, filtering, and detail modals with complete/block/unblock actions |
 | **🎯 Goals** | Create and track project targets with progress bars, categories, and target dates. Auto-syncs to `brain/active-projects.md` for agent awareness |
 | **📓 Journal** | Daily markdown journal entries stored as `brain/journal/YYYY-MM-DD.md`. Full-text search, day streak tracking, word count |
-| **❤️ Agent Health** | Real-time dashboard showing online/offline status for all 3 agents (opencode, Hermes, Gemini CLI). Auto-refresh every 5 seconds |
+| **❤️ Agent Health** | Real-time dashboard showing online/offline status for all 3 agents (opencode, Hermes, agy CLI). Auto-refresh every 5 seconds |
 | **🧭 Smart Router** | Keyword-based routing engine — type a task description and get an AI-suggested agent with confidence score. Manual override available |
 | **📊 Learning Analytics** | Skill evaluation scores, performance trends, and per-skill detail breakdowns with mini bar charts |
 | **🎬 Session Replay** | Browse and replay past opencode sessions directly from the dashboard. View message content and timestamps |
@@ -282,10 +303,10 @@ Select an agent from the sidebar → type your message → get response.
 |-------|----------|---------|
 | **opencode** | "Check system status", "Deploy to GKE" | Code + terminal automation |
 | **Hermes** | "What did I work on recently?", "Schedule a daily backup" | Memory recall, scheduling |
-| **Gemini** | "Research latest AI agent trends", "Analyze this image" | Web research, multi-modal |
+| **agy** | "Research latest AI agent trends", "Analyze this image" | Web research, multi-modal |
 
 ### Skills
-Browse 16 skills from Skills Hub → click Run → monitor eval scores over time.
+Browse 15 skills from Skills Hub → click Run → monitor eval scores over time.
 
 ### Scheduler
 Create cron jobs: heartbeat (5 min), memory consolidation (weekly), daily standup, DevOps audit.
@@ -309,7 +330,7 @@ Describe a task in plain English — the router analyzes keywords and suggests t
 Monitor online status of all 3 agents in real time with 5-second auto-refresh. Health checks are filesystem-based (no subprocess calls).
 
 ### Learning Analytics (v0.2.0)
-View evaluation scores for all 16 skills. Trends chart shows score progression over time. Top skills ranked by performance.
+View evaluation scores for all 15 skills. Trends chart shows score progression over time. Top skills ranked by performance.
 
 ### Session Replay (v0.2.0)
 Browse opencode session logs by date and size. Click "Replay" to view all messages in a chat-like interface.
@@ -338,11 +359,11 @@ Open Agentic OS on your phone — bottom nav bar replaces sidebar, touch targets
 
 | Feature | Claude Agent OS (Video) | Agentic OS (This Project) |
 |---------|------------------------|---------------------------|
-| **Core Agents** | Claude + OpenClaw + Hermes | opencode + Hermes + Gemini CLI |
+| **Core Agents** | Claude + OpenClaw + Hermes | opencode + Hermes + agy CLI |
 | **Cost** | $20/mo (Claude subscription) | **$0 — all free tiers** |
 | **Stack** | Next.js + Tailwind | FastAPI + vanilla JS SPA |
 | **Architecture** | 4 layers | **7 layers** |
-| **Skills System** | Plugin marketplace (2,000+ from Hermes) | 16 curated skills + eval scoring + learnings |
+| **Skills System** | Plugin marketplace (2,000+ from Hermes) | 15 curated skills + eval scoring + learnings |
 | **Memory** | Obsidian vault (external) | Built-in brain/ + SQLite FTS5 |
 | **Scheduler** | Not shown | APScheduler cron jobs |
 | **Cost Tracking** | Not shown | Built-in per-provider analytics |
@@ -360,7 +381,7 @@ Open Agentic OS on your phone — bottom nav bar replaces sidebar, touch targets
 - **OS**: Linux (Ubuntu 22.04+), macOS
 - **Python**: 3.10, 3.11, 3.12
 - **Browsers**: Chrome, Firefox, Edge
-- **Agents**: opencode v0.8+, Hermes Agent v1.0+, Gemini CLI v1.0+
+- **Agents**: opencode v0.8+, Hermes Agent v1.0+, agy CLI (Antigravity)
 
 ---
 

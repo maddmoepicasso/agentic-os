@@ -51,7 +51,7 @@ async function renderWizardStep() {
       wc.innerHTML = `
         <div style="text-align:center;padding:12px 0">
           <div style="font-size:48px;margin-bottom:16px">⬡</div>
-          <p style="font-size:14px;color:var(--text-secondary);line-height:1.6">Agentic OS coordinates <strong>opencode</strong>, <strong>Hermes Agent</strong>, and <strong>Gemini CLI</strong> into a unified multi-agent orchestration platform. This wizard will help you get everything configured.</p>
+          <p style="font-size:14px;color:var(--text-secondary);line-height:1.6">Agentic OS coordinates <strong>opencode</strong>, <strong>Hermes Agent</strong>, and <strong>agy</strong> into a unified multi-agent orchestration platform. This wizard will help you get everything configured.</p>
         </div>
       `;
       break;
@@ -89,7 +89,7 @@ async function renderWizardStep() {
           <select id="wizDefault" class="form-select">
             <option value="opencode">opencode — Best for code/DevOps</option>
             <option value="hermes">Hermes — Best for memory/scheduling</option>
-            <option value="gemini">Gemini CLI — Best for research</option>
+            <option value="agy">agy — Best for research</option>
           </select>
         </div>
         <div class="form-group">

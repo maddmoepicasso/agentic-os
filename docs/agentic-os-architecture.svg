@@ -199,12 +199,12 @@
   <circle cx="362" cy="823" r="2.5" fill="#c0fff0"/>
   <text x="372" y="827" fill="#c0fff0" font-size="10">Cron scheduling &amp; Telegram/Discord</text>
 
-  <!-- Agent 3: Gemini CLI -->
+  <!-- Agent 3: agy CLI -->
   <rect x="589" y="700" width="225" height="135" rx="10" fill="url(#geminiGrad)" filter="url(#agentShadow)"/>
   <rect x="589" y="700" width="225" height="4" rx="2" fill="#faa0c0"/>
   <circle cx="701" cy="732" r="18" fill="#ffffff" fill-opacity="0.15"/>
   <text x="701" y="738" text-anchor="middle" fill="#ffffff" font-size="16">🔍</text>
-  <text x="701" y="764" text-anchor="middle" fill="#ffffff" font-size="16" font-weight="700">Gemini CLI</text>
+  <text x="701" y="764" text-anchor="middle" fill="#ffffff" font-size="16" font-weight="700">agy CLI</text>
   <text x="701" y="782" text-anchor="middle" fill="#ffe0ee" font-size="11">Research &amp; Analysis Agent</text>
   <line x1="614" y1="793" x2="789" y2="793" stroke="#ffffff" stroke-opacity="0.1" stroke-width="1"/>
   <circle cx="614" cy="808" r="2.5" fill="#ffe0ee"/>
@@ -217,7 +217,7 @@
   <text x="450" y="889" text-anchor="middle" fill="#636e8a" font-size="10">138 files · 16 skills · 7 brain files · 13 dashboard pages · MIT</text>
 
   <rect x="200" y="905" width="500" height="24" rx="12" fill="#1a1a2e" stroke="#2d2d4a" stroke-width="0.5"/>
-  <text x="450" y="921" text-anchor="middle" fill="#fdcb6e" font-size="10">100% Free Tier — OpenRouter · Gemini Flash · Local opencode</text>
+  <text x="450" y="921" text-anchor="middle" fill="#fdcb6e" font-size="10">100% Free Tier — OpenRouter · Antigravity (agy) · Local opencode</text>
 
   <text x="450" y="960" text-anchor="middle" fill="#3d3d5a" font-size="9">github.com/modimihir07/agentic-os</text>
 </svg>

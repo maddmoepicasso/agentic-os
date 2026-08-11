@@ -102,6 +102,7 @@ async function showSkillDetail(encodedName) {
       <div style="margin-bottom:16px">
         <button class="btn btn-ghost" onclick="backToSkills()">← Back to Skills</button>
         <button class="btn btn-primary" style="margin-left:8px" onclick="quickRunSkill('${encodeURIComponent(name)}')">▶ Run ${safeName.replace(/-/g, ' ')}</button>
+        <button class="btn btn-accent" style="margin-left:8px" onclick="showSkillDiff('${encodeURIComponent(name)}')">📝 View Diff</button>
       </div>
       <div class="grid grid-2">
         <div class="card">
@@ -159,7 +160,7 @@ async function quickRunSkill(encodedName) {
         <option value="auto">Auto-detect</option>
         <option value="opencode">opencode</option>
         <option value="hermes">Hermes</option>
-        <option value="gemini">Gemini CLI</option>
+        <option value="agy">agy (Antigravity)</option>
       </select>
     </div>
     <div id="skillResult" style="display:none"></div>
@@ -200,5 +201,39 @@ async function executeSkillRun(encodedName) {
       resultArea.innerHTML = `<div class="empty-state" style="padding:20px"><div class="empty-state-icon">⚠</div><div class="empty-state-title">Error</div><div class="empty-state-desc">${escapeHtml(err.message)}</div></div>`;
     }
     if (runBtn) { runBtn.textContent = '▶ Run'; runBtn.disabled = false; }
+  }
+}
+
+async function showSkillDiff(encodedName) {
+  const name = decodeURIComponent(encodedName);
+  showModal(`Diff: ${escapeHtml(name)}`, `
+    <div class="form-group">
+      <label class="form-label">File (repo-relative)</label>
+      <div style="display:flex;gap:8px">
+        <input id="diffFile" class="form-input" value="skills/${escapeHtml(name)}/SKILL.md" style="flex:1;font-size:12px">
+        <button class="btn btn-primary" onclick="loadDiff()">🔍 Load</button>
+      </div>
+    </div>
+    <div id="diffResult"><div style="color:var(--text-muted);font-size:13px;padding:8px">Enter a file path to see its git diff.</div></div>
+  `, `
+    <button class="btn btn-ghost" onclick="closeModal()">Close</button>
+  `);
+}
+
+async function loadDiff() {
+  const input = document.getElementById('diffFile');
+  const result = document.getElementById('diffResult');
+  const file = input ? input.value.trim() : '';
+  if (!file) { showToast('Enter a file path', 'warning'); return; }
+  result.innerHTML = '<div class="loading" style="padding:16px"><div class="loading-spinner"></div></div>';
+  try {
+    const data = await api.getDiff(file);
+    if (!data.changed) {
+      result.innerHTML = `<div class="empty-state" style="padding:16px"><div class="empty-state-icon">✓</div><div class="empty-state-title">No changes</div><div class="empty-state-desc">${escapeHtml(file)} matches HEAD (or no uncommitted diff).</div></div>`;
+      return;
+    }
+    result.innerHTML = `<pre style="max-height:400px;overflow:auto;font-size:12px;white-space:pre-wrap;background:var(--bg-code,#1a1a2e);border-radius:8px;padding:12px;line-height:1.5">${escapeHtml(data.diff)}</pre>`;
+  } catch (err) {
+    result.innerHTML = `<div class="empty-state" style="padding:16px"><div class="empty-state-icon">⚠</div><div class="empty-state-title">Error</div><div class="empty-state-desc">${escapeHtml(err.message)}</div></div>`;
   }
 }

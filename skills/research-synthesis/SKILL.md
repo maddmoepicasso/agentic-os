@@ -1,6 +1,6 @@
 ---
 name: research-synthesis
-description: Web research and synthesis using Gemini CLI
+description: Web research and synthesis using agy CLI
 version: 1.0.0
 author: Agentic OS
 tags: [research, analysis, web, synthesis]
@@ -20,7 +20,7 @@ Performs multi-source web research on a topic, synthesizes findings into a struc
 
 ## Process
 1. Define research scope and questions
-2. Search web via Gemini CLI for multiple sources
+2. Search web via agy CLI for multiple sources
 3. Extract key findings per source
 4. Cross-reference and validate
 5. Synthesize into structured report
@@ -30,5 +30,5 @@ Performs multi-source web research on a topic, synthesizes findings into a struc
 Research report with sections: summary, findings, sources, recommendations
 
 ## Agent Assignment
-- Primary: gemini
+- Primary: agy
 - Fallback: opencode (for formatting only)

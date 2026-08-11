@@ -4,7 +4,7 @@ async function renderChat() {
     <div class="page-header">
       <div class="page-header-left">
         <h1 class="page-title">AI Chat</h1>
-        <p class="page-subtitle">Talk to opencode, Hermes, and Gemini CLI</p>
+        <p class="page-subtitle">Talk to opencode, Hermes, and agy CLI</p>
       </div>
       <div class="btn-group">
         <button class="btn" onclick="clearChat()">🗑 Clear</button>
@@ -28,10 +28,10 @@ async function renderChat() {
             <div class="chat-agent-desc">Memory & Scheduling</div>
           </div>
         </div>
-        <div class="chat-agent" data-agent="gemini" onclick="selectAgent('gemini')">
+        <div class="chat-agent" data-agent="agy" onclick="selectAgent('agy')">
           <div class="agent-dot offline"></div>
           <div>
-            <div class="chat-agent-name">Gemini CLI</div>
+            <div class="chat-agent-name">agy (Antigravity)</div>
             <div class="chat-agent-desc">Research & Analysis</div>
           </div>
         </div>
@@ -48,14 +48,19 @@ async function renderChat() {
             <div style="display:flex;gap:8px;margin-top:16px;flex-wrap:wrap;justify-content:center">
               <button class="btn btn-sm" onclick="sendQuickPrompt('opencode','Check the system status and running processes')">🔍 System Check</button>
               <button class="btn btn-sm" onclick="sendQuickPrompt('hermes','What did I work on recently?')">🧠 Recall Memory</button>
-              <button class="btn btn-sm" onclick="sendQuickPrompt('gemini','Research the latest trends in AI agents')">📊 Research</button>
+              <button class="btn btn-sm" onclick="sendQuickPrompt('agy','Research the latest trends in AI agents')">📊 Research</button>
             </div>
           </div>
         </div>
         <div class="chat-input-area">
           <div class="chat-agent-indicator" id="chatAgentIndicator">opencode</div>
           <textarea id="chatInput" class="chat-input" rows="1" placeholder="Type a message..." onkeydown="handleChatKey(event)"></textarea>
+          <button class="btn btn-icon" onclick="document.getElementById('chatFileInput').click()" title="Attach file" style="font-size:16px">📎</button>
+          <input type="file" id="chatFileInput" style="display:none" onchange="handleChatFile(this)">
           <button class="btn btn-primary btn-icon" onclick="sendChatMessage()" id="chatSendBtn" title="Send">➤</button>
+        </div>
+        <div id="chatAttachment" style="display:none;padding:6px 12px;font-size:12px;color:var(--text-secondary);background:var(--yellow-dim);border-top:1px solid var(--border)">
+          📎 <span id="chatAttachmentName"></span> <span style="cursor:pointer;margin-left:8px;color:var(--red)" onclick="clearChatAttachment()">✕ remove</span>
         </div>
       </div>
     </div>
@@ -116,35 +121,63 @@ function autoResizeTextarea(el) {
 async function sendChatMessage() {
   const input = document.getElementById('chatInput');
   const message = input.value.trim();
-  if (!message) return;
+  const fileInput = document.getElementById('chatFileInput');
+  const file = fileInput && fileInput.files && fileInput.files[0];
+  if (!message && !file) return;
 
   const agent = window._currentAgent || 'opencode';
   input.value = '';
   input.style.height = 'auto';
 
   // Add user message to chat
-  addChatMessage('user', message, agent);
+  addChatMessage('user', message || `📎 ${file.name}`, agent);
 
   // Show typing indicator
   const typingId = showTypingIndicator(agent);
 
+  // Client-side timeout: 200s (slightly more than Hermes' 180s backend timeout)
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), 200000);
+
   try {
-    // Client-side timeout: 200s (slightly more than Hermes' 180s backend timeout)
-    const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 200000);
-    const r = await api.chat(agent, message, controller);
+    let r;
+    if (file) {
+      r = await api.chatWithFile(agent, message, file, controller);
+      clearChatAttachment();
+    } else {
+      r = await api.chat(agent, message, controller);
+    }
     clearTimeout(timeoutId);
     removeTypingIndicator(typingId);
     addChatMessage('assistant', r.response.content, agent);
 
     // Store in local history
-    window._chatHistory.push({ role: 'user', content: message, agent });
+    window._chatHistory.push({ role: 'user', content: message || `📎 ${file.name}`, agent });
     window._chatHistory.push({ role: 'assistant', content: r.response.content, agent });
   } catch (err) {
     removeTypingIndicator(typingId);
     const msg = err.name === 'AbortError' ? 'Request timed out after 200s' : err.message;
     addChatMessage('assistant', `⚠ Error: ${msg}`, agent);
   }
+}
+
+function handleChatFile(fileInput) {
+  const file = fileInput.files && fileInput.files[0];
+  if (!file) return;
+  if (file.size > 2 * 1024 * 1024) {
+    showToast('File too large (max 2 MB)', 'error');
+    fileInput.value = '';
+    return;
+  }
+  document.getElementById('chatAttachment').style.display = '';
+  document.getElementById('chatAttachmentName').textContent = `${file.name} (${formatBytes(file.size)})`;
+}
+
+function clearChatAttachment() {
+  const fi = document.getElementById('chatFileInput');
+  if (fi) fi.value = '';
+  const bar = document.getElementById('chatAttachment');
+  if (bar) bar.style.display = 'none';
 }
 
 function addChatMessage(role, content, agent) {

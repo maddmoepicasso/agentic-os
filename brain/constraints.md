@@ -10,7 +10,7 @@
 - Python 3.10+ required (FastAPI backend)
 - Node.js 18+ required (opencode)
 - Hermes Agent needs Python 3.11+ and Node.js
-- Gemini CLI needs `gemini` binary installed
+- agy CLI (Antigravity) needs `agy` binary installed — replaces the deprecated gemini CLI
 - Linux environment (Ubuntu/WSL)
 - Dashboard binds to localhost only — no external exposure without explicit config
 

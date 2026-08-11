@@ -51,7 +51,25 @@ const api = {
   getStandards: () => api.get('/api/standards'),
   discoverStandards: () => api.post('/api/standards/discover'),
   chat: (agent, message, controller) => api.post('/api/chat', { agent, message }, controller),
+  chatWithFile: async (agent, message, file, controller) => {
+    const form = new FormData();
+    form.append('agent', agent);
+    form.append('message', message || '');
+    form.append('file', file);
+    const opts = { method: 'POST', body: form };
+    if (controller) opts.signal = controller.signal;
+    const r = await fetch('/api/chat/upload', opts);
+    if (!r.ok) { const e = await r.json().catch(() => ({})); throw new Error(e.detail || `Request failed: ${r.status}`); }
+    return r.json();
+  },
   getChatHistory: () => api.get('/api/chat/history'),
+  searchChatHistory: (q, agent, limit) => {
+    const params = new URLSearchParams();
+    if (q) params.set('q', q);
+    if (agent) params.set('agent', agent);
+    if (limit) params.set('limit', limit);
+    return api.get(`/api/chat/history?${params.toString()}`);
+  },
   // Kanban
   getKanbanBoard: (status) => api.get(status ? `/api/kanban/board?status=${encodeURIComponent(status)}` : '/api/kanban/board'),
   getKanbanTask: (id) => api.get(`/api/kanban/tasks/${encodeURIComponent(id)}`),
@@ -103,4 +121,8 @@ const api = {
   resetCircuitBreaker: (agent) => api.post('/api/circuit-breaker/reset', { agent }),
   // v0.3.0: PWA
   getManifest: () => api.get('/manifest.json'),
+  // v0.4.0: Memory Knowledge Graph
+  getMemoryGraph: () => api.get('/api/memory/graph'),
+  // v0.4.0: Code Diff Viewer
+  getDiff: (file, ref = 'HEAD') => api.get(`/api/diff?file=${encodeURIComponent(file)}&ref=${encodeURIComponent(ref)}`),
 };
