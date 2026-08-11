@@ -132,6 +132,12 @@ def safe_extractall(tar: tarfile.TarFile, path: Path):
             raise HTTPException(400, f"Blocked path traversal: {member.name}")
     tar.extractall(path=path)
 
+def validate_identifier(value: str, pattern: str, label: str = "name") -> str:
+    """Reject path separators / traversal before using a value in a filesystem path."""
+    if not value or not re.fullmatch(pattern, value):
+        raise HTTPException(400, f"Invalid {label}")
+    return value
+
 # ─── Security Headers Middleware ─────────────────────────────────
 
 class SecurityHeadersMiddleware:
@@ -269,8 +275,7 @@ def list_skills():
 
 @app.get("/api/skills/{name}")
 def get_skill(name: str):
-    if ".." in name or "/" in name:
-        raise HTTPException(400, "Invalid skill name")
+    validate_identifier(name, r"^[a-zA-Z0-9_-]+$", "skill name")
     path = BASE_DIR / "skills" / name
     if not path.exists():
         raise HTTPException(404, "Skill not found")
@@ -285,8 +290,7 @@ def get_skill(name: str):
 
 @app.post("/api/skills/{name}/run")
 def run_skill(name: str, req: Optional[SkillRunRequest] = None):
-    if ".." in name or "/" in name:
-        raise HTTPException(400, "Invalid skill name")
+    validate_identifier(name, r"^[a-zA-Z0-9_-]+$", "skill name")
     path = BASE_DIR / "skills" / name
     if not path.exists():
         raise HTTPException(404, "Skill not found")
@@ -370,8 +374,7 @@ def run_skill(name: str, req: Optional[SkillRunRequest] = None):
 
 @app.get("/api/skills/{name}/eval")
 def get_skill_eval(name: str):
-    if ".." in name or "/" in name:
-        raise HTTPException(400, "Invalid skill name")
+    validate_identifier(name, r"^[a-zA-Z0-9_-]+$", "skill name")
     path = BASE_DIR / "skills" / name / "score-history.json"
     if not path.exists():
         return {"scores": []}
@@ -391,6 +394,7 @@ def list_jobs():
 def create_job(job: ScheduleJobRequest):
     jobs_dir = BASE_DIR / "scheduler" / "jobs"
     jobs_dir.mkdir(parents=True, exist_ok=True)
+    validate_identifier(job.name, r"^[a-zA-Z0-9 _-]+$", "job name")
     job_data = {
         "id": str(uuid.uuid4())[:8],
         "name": job.name,
@@ -510,8 +514,7 @@ def create_backup():
 
 @app.post("/api/backup/restore")
 def restore_backup(data: BackupRestoreRequest):
-    if ".." in data.file or "/" in data.file:
-        raise HTTPException(400, "Invalid backup file")
+    validate_identifier(data.file, r"^agentic-os-\d{8}_\d{6}\.tar\.gz$", "backup file")
     backup_file = BASE_DIR / "backups" / data.file
     if not backup_file.exists():
         raise HTTPException(404, "Backup file not found")
@@ -1008,6 +1011,7 @@ def load_kanban_tasks():
 
 def save_kanban_task(task: dict):
     ensure_dir(KANBAN_DIR)
+    validate_identifier(str(task["id"]), r"^[a-zA-Z0-9_-]+$", "task id")
     (KANBAN_DIR / f"{task['id']}.json").write_text(json.dumps(task, indent=2))
 
 def load_goals():
@@ -1037,6 +1041,7 @@ def kanban_board(status: Optional[str] = None):
 
 @app.get("/api/kanban/tasks/{task_id}")
 def kanban_get_task(task_id: str):
+    validate_identifier(task_id, r"^[a-zA-Z0-9_-]+$", "task id")
     path = KANBAN_DIR / f"{task_id}.json"
     if not path.exists():
         raise HTTPException(404, "Task not found")
@@ -1065,6 +1070,7 @@ def kanban_create_task(data: KanbanTaskCreate):
 
 @app.patch("/api/kanban/tasks/{task_id}")
 def kanban_update_task(task_id: str, data: KanbanTaskUpdate):
+    validate_identifier(task_id, r"^[a-zA-Z0-9_-]+$", "task id")
     path = KANBAN_DIR / f"{task_id}.json"
     if not path.exists():
         raise HTTPException(404, "Task not found")
@@ -1080,6 +1086,7 @@ def kanban_update_task(task_id: str, data: KanbanTaskUpdate):
 
 @app.post("/api/kanban/tasks/{task_id}/complete")
 def kanban_complete_task(task_id: str, data: KanbanComplete):
+    validate_identifier(task_id, r"^[a-zA-Z0-9_-]+$", "task id")
     path = KANBAN_DIR / f"{task_id}.json"
     if not path.exists():
         raise HTTPException(404, "Task not found")
@@ -1094,6 +1101,7 @@ def kanban_complete_task(task_id: str, data: KanbanComplete):
 
 @app.post("/api/kanban/tasks/{task_id}/block")
 def kanban_block_task(task_id: str, data: KanbanBlock):
+    validate_identifier(task_id, r"^[a-zA-Z0-9_-]+$", "task id")
     path = KANBAN_DIR / f"{task_id}.json"
     if not path.exists():
         raise HTTPException(404, "Task not found")
@@ -1107,6 +1115,7 @@ def kanban_block_task(task_id: str, data: KanbanBlock):
 
 @app.post("/api/kanban/tasks/{task_id}/unblock")
 def kanban_unblock_task(task_id: str):
+    validate_identifier(task_id, r"^[a-zA-Z0-9_-]+$", "task id")
     path = KANBAN_DIR / f"{task_id}.json"
     if not path.exists():
         raise HTTPException(404, "Task not found")
@@ -1120,6 +1129,7 @@ def kanban_unblock_task(task_id: str):
 
 @app.post("/api/kanban/tasks/{task_id}/comments")
 def kanban_add_comment(task_id: str, data: KanbanCommentCreate):
+    validate_identifier(task_id, r"^[a-zA-Z0-9_-]+$", "task id")
     path = KANBAN_DIR / f"{task_id}.json"
     if not path.exists():
         raise HTTPException(404, "Task not found")
@@ -1137,6 +1147,7 @@ def kanban_add_comment(task_id: str, data: KanbanCommentCreate):
 @app.post("/api/kanban/links")
 def kanban_add_link(data: KanbanLinkCreate):
     for tid in [data.parent_id, data.child_id]:
+        validate_identifier(tid, r"^[a-zA-Z0-9_-]+$", "task id")
         path = KANBAN_DIR / f"{tid}.json"
         if not path.exists():
             raise HTTPException(404, f"Task {tid} not found")
@@ -1153,6 +1164,7 @@ def kanban_add_link(data: KanbanLinkCreate):
 @app.delete("/api/kanban/links")
 def kanban_remove_link(parent_id: str = Query(...), child_id: str = Query(...)):
     for tid in [parent_id, child_id]:
+        validate_identifier(tid, r"^[a-zA-Z0-9_-]+$", "task id")
         path = KANBAN_DIR / f"{tid}.json"
         if path.exists():
             t = json.loads(path.read_text())
@@ -1169,6 +1181,7 @@ def kanban_dispatch():
 
 @app.post("/api/kanban/tasks/{task_id}/specify")
 def kanban_specify_task(task_id: str):
+    validate_identifier(task_id, r"^[a-zA-Z0-9_-]+$", "task id")
     path = KANBAN_DIR / f"{task_id}.json"
     if not path.exists():
         raise HTTPException(404, "Task not found")
@@ -1181,6 +1194,7 @@ def kanban_specify_task(task_id: str):
 
 @app.post("/api/kanban/tasks/{task_id}/decompose")
 def kanban_decompose_task(task_id: str):
+    validate_identifier(task_id, r"^[a-zA-Z0-9_-]+$", "task id")
     path = KANBAN_DIR / f"{task_id}.json"
     if not path.exists():
         raise HTTPException(404, "Task not found")
@@ -1292,6 +1306,7 @@ def list_journal_entries():
 
 @app.get("/api/journal/entries/{entry_date}")
 def get_journal_entry(entry_date: str):
+    validate_identifier(entry_date, r"^\d{4}-\d{2}-\d{2}$", "date")
     try:
         path = JOURNAL_DIR / f"{entry_date}.md"
         ensure_dir(JOURNAL_DIR)
@@ -1302,6 +1317,7 @@ def get_journal_entry(entry_date: str):
 
 @app.put("/api/journal/entries/{entry_date}")
 def save_journal_entry(entry_date: str, data: JournalSave):
+    validate_identifier(entry_date, r"^\d{4}-\d{2}-\d{2}$", "date")
     try:
         ensure_dir(JOURNAL_DIR)
         path = JOURNAL_DIR / f"{entry_date}.md"
