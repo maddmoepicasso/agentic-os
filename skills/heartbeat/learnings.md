@@ -4499,3 +4499,23 @@ user
 Omnium route: omniroute
 
 You are Codex running inside Angelic OS. Use Angelic OS skill
+
+## 2026-09-13 (Run dd5365ac)
+- Agent: codex
+- Input: Triggered by cron.
+- Output: 2026-09-13T15:20:00.309048Z ERROR codex_models_manager::cache: failed to load models cache: missing field `base_instructions` at line 133 column 5
+OpenAI Codex v0.146.0
+--------
+workdir: C:\Angels\agentic-os
+model: auto
+provider: openai
+approval: never
+sandbox: workspace-write [workdir, /tmp, $TMPDIR]
+reasoning effort: low
+reasoning summaries: none
+session id: 01a09b5a-981c-7b22-a874-943adcb64b2e
+--------
+user
+Omnium route: omniroute
+
+You are Codex running inside Angelic OS. Use Angelic OS skill
