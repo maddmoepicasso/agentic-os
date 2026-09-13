@@ -1,0 +1,11 @@
+﻿{
+  "id": "picassomoes-reddit-seo-daily",
+  "name": "Picassomoes Reddit SEO Draft",
+  "skill": "codex-reddit-seo",
+  "cron": "0 10 * * *",
+  "enabled": true,
+  "created": "2026-09-12T00:00:00Z",
+  "last_run": null,
+  "next_run": null,
+  "description": "Draft one useful daily Reddit or blog topic for r/HillsboroughTattoos. Keep it quiet unless there is useful output or an error."
+}

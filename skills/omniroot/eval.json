@@ -1,0 +1,16 @@
+{
+  "criteria": [
+    {
+      "weight": 0.4,
+      "name": "linux_prereq_check"
+    },
+    {
+      "weight": 0.3,
+      "name": "scan_command_accuracy"
+    },
+    {
+      "weight": 0.3,
+      "name": "security_caution"
+    }
+  ]
+}

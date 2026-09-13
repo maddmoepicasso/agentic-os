@@ -4,7 +4,7 @@ async function renderSmartRouter() {
     <div class="page-header">
       <div class="page-header-left">
         <div class="page-title">Smart Router</div>
-        <div class="page-subtitle">Intelligent task routing — auto-suggest or manually pick an agent</div>
+        <div class="page-subtitle">Codex-first routing for Angelic OS skills and workflows</div>
       </div>
     </div>
     <div class="card" style="margin-bottom:20px">
@@ -19,7 +19,8 @@ async function renderSmartRouter() {
         <div class="form-group" style="flex:1">
           <label class="form-label">Route to Agent</label>
           <select class="form-select" id="routerAgentSelect">
-            <option value="auto">🤖 Auto (AI suggests)</option>
+            <option value="auto">Auto -> Codex</option>
+            <option value="codex">✨ Codex (OpenAI coding agent)</option>
             <option value="opencode">🔧 opencode (Code/DevOps)</option>
             <option value="hermes">⚡ Hermes (Memory/Scheduling)</option>
             <option value="agy">🧠 agy (Research/Analysis)</option>
@@ -34,6 +35,7 @@ async function renderSmartRouter() {
     <div class="card">
       <table>
         <tr><th>Agent</th><th>Best For</th><th>Keywords</th></tr>
+        <tr><td><strong>✨ Codex</strong></td><td>Implementation, debugging, review, tests, and project work</td><td class="text-muted text-sm">code, build, debug, review, test, refactor, implement, fix</td></tr>
         <tr><td><strong>🔧 opencode</strong></td><td>Code, DevOps, infra, git, file operations</td><td class="text-muted text-sm">code, deploy, git, terraform, docker, test, build, script</td></tr>
         <tr><td><strong>⚡ Hermes</strong></td><td>Memory, scheduling, messaging, skills</td><td class="text-muted text-sm">memory, schedule, cron, reminder, brain, plugin, backup</td></tr>
         <tr><td><strong>🧠 agy</strong></td><td>Research, analysis, study, document, review</td><td class="text-muted text-sm">research, analyze, search, explain, study, learn, report</td></tr>
@@ -50,7 +52,7 @@ async function suggestRouter() {
   try {
     const data = await api.suggestRouter(task);
     const result = document.getElementById('routerResult');
-    const agentIcons = { opencode: '🔧', hermes: '⚡', agy: '🧠' };
+    const agentIcons = { codex: '✨', opencode: '🔧', hermes: '⚡', agy: '🧠' };
     const confidenceColors = { high: 'var(--green)', medium: 'var(--yellow)', low: 'var(--text-muted)' };
     result.innerHTML = `
       <div class="card" style="border-color:${confidenceColors[data.confidence] || 'var(--border)'};margin-bottom:12px">
@@ -116,3 +118,4 @@ async function routeTask() {
     if (btn) { btn.disabled = false; btn.textContent = '🚀 Route Task'; }
   }
 }
+

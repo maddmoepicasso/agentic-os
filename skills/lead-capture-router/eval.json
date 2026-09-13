@@ -1,0 +1,4 @@
+{
+  "criteria": ["accurate_extraction", "useful_scoring", "next_action_quality", "reply_quality"],
+  "weights": [0.25, 0.25, 0.25, 0.25]
+}

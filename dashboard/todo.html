@@ -1,0 +1,393 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Workspace Todo</title>
+  <style>
+    :root {
+      --bg: #0f1117;
+      --panel: #171a23;
+      --panel-2: #1f2430;
+      --text: #f4f6fb;
+      --muted: #9aa3b2;
+      --line: #2b3242;
+      --accent: #45aaf2;
+      --green: #00d4aa;
+      --red: #ff6b6b;
+      --yellow: #f7b731;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background:
+        linear-gradient(135deg, rgba(69, 170, 242, 0.12), transparent 32%),
+        radial-gradient(circle at 84% 12%, rgba(0, 212, 170, 0.16), transparent 28%),
+        var(--bg);
+      color: var(--text);
+    }
+
+    main {
+      width: min(1040px, calc(100vw - 32px));
+      margin: 0 auto;
+      padding: 32px 0;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      gap: 20px;
+      align-items: flex-end;
+      margin-bottom: 22px;
+    }
+
+    h1 {
+      margin: 0 0 6px;
+      font-size: 34px;
+      line-height: 1.1;
+      letter-spacing: 0;
+    }
+
+    .sub {
+      margin: 0;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .shell {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 280px;
+      gap: 16px;
+      align-items: start;
+    }
+
+    .panel {
+      background: rgba(23, 26, 35, 0.9);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      box-shadow: 0 18px 60px rgba(0, 0, 0, 0.28);
+    }
+
+    .composer {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 132px;
+      gap: 10px;
+      padding: 14px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    input, select, button {
+      font: inherit;
+    }
+
+    input[type="text"] {
+      width: 100%;
+      min-height: 44px;
+      padding: 0 13px;
+      color: var(--text);
+      background: #11141c;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      outline: none;
+    }
+
+    input[type="text"]:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(69, 170, 242, 0.16);
+    }
+
+    button {
+      min-height: 40px;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      color: var(--text);
+      background: var(--panel-2);
+      cursor: pointer;
+    }
+
+    button:hover { border-color: #3b455c; }
+
+    .primary {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: #06101a;
+      font-weight: 700;
+    }
+
+    .toolbar {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      padding: 12px 14px;
+      border-bottom: 1px solid var(--line);
+      flex-wrap: wrap;
+    }
+
+    .filters {
+      display: flex;
+      gap: 8px;
+    }
+
+    .filter {
+      padding: 0 12px;
+      min-height: 36px;
+    }
+
+    .filter.active {
+      border-color: var(--accent);
+      color: var(--accent);
+      background: rgba(69, 170, 242, 0.12);
+    }
+
+    .list {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+
+    .todo {
+      display: grid;
+      grid-template-columns: 34px minmax(0, 1fr) 42px;
+      gap: 10px;
+      align-items: center;
+      padding: 12px 14px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .todo:last-child { border-bottom: 0; }
+
+    .check {
+      width: 22px;
+      height: 22px;
+      accent-color: var(--green);
+    }
+
+    .title {
+      overflow-wrap: anywhere;
+      line-height: 1.35;
+    }
+
+    .done .title {
+      color: var(--muted);
+      text-decoration: line-through;
+    }
+
+    .delete {
+      color: var(--red);
+      min-height: 34px;
+    }
+
+    aside {
+      padding: 16px;
+    }
+
+    .metric {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 12px 0;
+      border-bottom: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .metric strong {
+      color: var(--text);
+      font-size: 18px;
+    }
+
+    .actions {
+      display: grid;
+      gap: 8px;
+      margin-top: 14px;
+    }
+
+    .empty {
+      padding: 42px 18px;
+      color: var(--muted);
+      text-align: center;
+    }
+
+    @media (max-width: 760px) {
+      main { width: min(100vw - 20px, 1040px); padding: 18px 0; }
+      header { display: block; }
+      h1 { font-size: 28px; }
+      .shell { grid-template-columns: 1fr; }
+      .composer { grid-template-columns: 1fr; }
+      .toolbar { display: grid; }
+      .filters { display: grid; grid-template-columns: repeat(3, 1fr); }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <header>
+      <div>
+        <h1>Workspace Todo</h1>
+        <p class="sub">A saved Todo app inside your Agent OS workspace.</p>
+      </div>
+      <p class="sub" id="savedState">Saved locally</p>
+    </header>
+
+    <section class="shell">
+      <div class="panel">
+        <form class="composer" id="todoForm">
+          <input id="todoInput" type="text" maxlength="120" placeholder="Add a task..." autocomplete="off">
+          <button class="primary" type="submit">Add Task</button>
+        </form>
+
+        <div class="toolbar">
+          <div class="filters" role="tablist" aria-label="Todo filters">
+            <button class="filter active" type="button" data-filter="all">All</button>
+            <button class="filter" type="button" data-filter="active">Active</button>
+            <button class="filter" type="button" data-filter="done">Done</button>
+          </div>
+          <button type="button" id="clearDone">Clear Done</button>
+        </div>
+
+        <ul class="list" id="todoList"></ul>
+      </div>
+
+      <aside class="panel">
+        <div class="metric"><span>Total</span><strong id="totalCount">0</strong></div>
+        <div class="metric"><span>Active</span><strong id="activeCount">0</strong></div>
+        <div class="metric"><span>Done</span><strong id="doneCount">0</strong></div>
+        <div class="actions">
+          <button type="button" id="markAll">Mark All Done</button>
+          <button type="button" id="resetDemo">Load Demo Tasks</button>
+        </div>
+      </aside>
+    </section>
+  </main>
+
+  <script>
+    const storeKey = 'agentic-workspace-todos';
+    const list = document.getElementById('todoList');
+    const form = document.getElementById('todoForm');
+    const input = document.getElementById('todoInput');
+    const savedState = document.getElementById('savedState');
+    let filter = 'all';
+    let todos = loadTodos();
+
+    function loadTodos() {
+      try {
+        const saved = JSON.parse(localStorage.getItem(storeKey) || '[]');
+        return Array.isArray(saved) ? saved : [];
+      } catch {
+        return [];
+      }
+    }
+
+    function saveTodos() {
+      localStorage.setItem(storeKey, JSON.stringify(todos));
+      savedState.textContent = 'Saved ' + new Date().toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' });
+    }
+
+    function addTodo(title) {
+      todos.unshift({ id: crypto.randomUUID(), title, done: false, createdAt: Date.now() });
+      saveTodos();
+      render();
+    }
+
+    function visibleTodos() {
+      if (filter === 'active') return todos.filter(todo => !todo.done);
+      if (filter === 'done') return todos.filter(todo => todo.done);
+      return todos;
+    }
+
+    function render() {
+      const items = visibleTodos();
+      if (!items.length) {
+        list.innerHTML = '<li class="empty">No tasks here yet.</li>';
+      } else {
+        list.innerHTML = items.map(todo => `
+          <li class="todo ${todo.done ? 'done' : ''}" data-id="${todo.id}">
+            <input class="check" type="checkbox" ${todo.done ? 'checked' : ''} aria-label="Toggle task">
+            <div class="title">${escapeHtml(todo.title)}</div>
+            <button class="delete" type="button" aria-label="Delete task">X</button>
+          </li>
+        `).join('');
+      }
+
+      document.getElementById('totalCount').textContent = todos.length;
+      document.getElementById('activeCount').textContent = todos.filter(todo => !todo.done).length;
+      document.getElementById('doneCount').textContent = todos.filter(todo => todo.done).length;
+      document.querySelectorAll('.filter').forEach(button => {
+        button.classList.toggle('active', button.dataset.filter === filter);
+      });
+    }
+
+    function escapeHtml(value) {
+      return String(value).replace(/[&<>"']/g, char => ({
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;',
+        '"': '&quot;',
+        "'": '&#039;'
+      }[char]));
+    }
+
+    form.addEventListener('submit', event => {
+      event.preventDefault();
+      const title = input.value.trim();
+      if (!title) return;
+      addTodo(title);
+      input.value = '';
+      input.focus();
+    });
+
+    list.addEventListener('click', event => {
+      const row = event.target.closest('.todo');
+      if (!row) return;
+      const todo = todos.find(item => item.id === row.dataset.id);
+      if (!todo) return;
+
+      if (event.target.classList.contains('check')) {
+        todo.done = event.target.checked;
+      }
+
+      if (event.target.classList.contains('delete')) {
+        todos = todos.filter(item => item.id !== todo.id);
+      }
+
+      saveTodos();
+      render();
+    });
+
+    document.querySelectorAll('.filter').forEach(button => {
+      button.addEventListener('click', () => {
+        filter = button.dataset.filter;
+        render();
+      });
+    });
+
+    document.getElementById('clearDone').addEventListener('click', () => {
+      todos = todos.filter(todo => !todo.done);
+      saveTodos();
+      render();
+    });
+
+    document.getElementById('markAll').addEventListener('click', () => {
+      todos = todos.map(todo => ({ ...todo, done: true }));
+      saveTodos();
+      render();
+    });
+
+    document.getElementById('resetDemo').addEventListener('click', () => {
+      todos = [
+        { id: crypto.randomUUID(), title: 'Test the live preview', done: false, createdAt: Date.now() },
+        { id: crypto.randomUUID(), title: 'Save this app in the workspace', done: true, createdAt: Date.now() - 1 },
+        { id: crypto.randomUUID(), title: 'Add Cloudflare status to Agent OS', done: true, createdAt: Date.now() - 2 }
+      ];
+      saveTodos();
+      render();
+    });
+
+    render();
+  </script>
+</body>
+</html>

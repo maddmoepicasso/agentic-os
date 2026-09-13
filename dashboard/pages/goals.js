@@ -62,7 +62,10 @@ async function renderGoals() {
           <span class="badge badge-accent">${g.category}</span>
           ${g.target_date ? `<span class="text-muted text-xs">🎯 ${g.target_date}</span>` : ''}
         </div>
-        <div class="goal-card-title">${escapeHtml(g.title)}</div>
+        <label class="goal-checkbox-row">
+          <input type="checkbox" ${g.status === 'completed' ? 'checked' : ''} onchange="toggleGoalDone('${g.id}', this.checked)">
+          <span class="goal-card-title">${escapeHtml(g.title)}</span>
+        </label>
         ${g.description ? `<div class="text-muted text-sm" style="margin-bottom:8px">${escapeHtml(g.description)}</div>` : ''}
         <div class="goal-card-progress">
           <div class="goal-card-progress-bar"><div class="goal-card-progress-fill" style="width:${g.progress || 0}%"></div></div>
@@ -94,11 +97,11 @@ function showCreateGoalModal() {
         <div class="modal-body">
           <div class="form-group">
             <label class="form-label">Title *</label>
-            <input class="form-input" id="goalTitle" placeholder="e.g., Complete CloudMart Phase 2">
+            <div class="voice-row"><input class="form-input" id="goalTitle" placeholder="e.g., Complete CloudMart Phase 2"><button class="btn btn-icon" onclick="startVoiceInput('goalTitle')" type="button">Mic</button></div>
           </div>
           <div class="form-group">
             <label class="form-label">Description</label>
-            <textarea class="form-textarea" id="goalDesc" placeholder="What does this goal involve?" rows="3"></textarea>
+            <div class="voice-row"><textarea class="form-textarea" id="goalDesc" placeholder="What does this goal involve?" rows="3"></textarea><button class="btn btn-icon" onclick="startVoiceInput('goalDesc')" type="button">Mic</button></div>
           </div>
           <div class="form-row">
             <div class="form-group">
@@ -161,6 +164,15 @@ async function completeGoal(id) {
     renderGoals();
   } catch (err) {
     showToast('Failed to complete goal: ' + err.message, 'error');
+  }
+}
+
+async function toggleGoalDone(id, done) {
+  try {
+    await api.updateGoal(id, { progress: done ? 100 : 0, status: done ? 'completed' : 'active' });
+    renderGoals();
+  } catch (err) {
+    showToast('Failed to update goal: ' + err.message, 'error');
   }
 }
 

@@ -26,10 +26,10 @@ class CoreEndpointTests(unittest.TestCase):
         self.assertEqual(data.get("status"), "healthy")
         self.assertIn("agents", data)
 
-    def test_three_agents_present(self):
+    def test_configured_agents_present(self):
         _, data = self.h.api("GET", "/api/status")
         names = {a.get("name") for a in data.get("agents", [])}
-        self.assertEqual(names, {"opencode", "hermes", "agy"})
+        self.assertTrue({"codex", "opencode", "hermes", "agy"}.issubset(names))
 
     def test_skills_list(self):
         status, data = self.h.api("GET", "/api/skills")
@@ -131,3 +131,4 @@ class CoreEndpointTests(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main(verbosity=2)
+

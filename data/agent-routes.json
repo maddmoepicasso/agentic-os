@@ -1,42 +1,201 @@
 {
-  "routing_rules": [
-    {
-      "pattern": "code|devops|infrastructure|terraform|k8s|gcp|git|deploy|ci/cd",
-      "target": "opencode",
-      "priority": 10
-    },
-    {
-      "pattern": "memory|remember|schedule|cron|telegram|discord|channel|notif",
-      "target": "hermes",
-      "priority": 10
-    },
-    {
-      "pattern": "research|analyze|search|summarize|compare|investigate|learn",
-      "target": "agy",
-      "priority": 10
-    },
-    {
-      "pattern": ".*",
-      "target": "opencode",
-      "priority": 0,
-      "description": "Default fallback"
-    }
-  ],
-  "agent_capabilities": {
-    "opencode": ["code_generation", "file_operations", "git_management", "terminal_execution", "infrastructure_as_code", "testing", "debugging"],
-    "hermes": ["persistent_memory", "scheduled_tasks", "messaging_channels", "skill_hub", "voice", "browser_automation", "subagent_delegation"],
-    "agy": ["web_search", "multi_modal_analysis", "document_understanding", "data_analysis", "research_synthesis", "reasoning"]
-  },
   "handoff_protocol": {
     "enabled": true,
     "format": {
-      "from_agent": "string",
+      "pending_decisions": "string[]",
       "to_agent": "string",
       "task_id": "string",
       "context_summary": "string",
-      "pending_decisions": "string[]",
       "output_files": "string[]",
-      "status": "pending|in_progress|completed|failed"
+      "status": "pending|in_progress|completed|failed",
+      "from_agent": "string"
     }
+  },
+  "agent_capabilities": {
+    "opencode": [
+      "free_openrouter_coding_fallback",
+      "legacy_manual_agent"
+    ],
+    "hermes": [
+      "local_cli_memory_agent",
+      "scheduling",
+      "goal_mode",
+      "manual_agent"
+    ],
+    "agy": [
+      "local_cli_research_agent",
+      "analysis",
+      "manual_agent"
+    ],
+    "codex": [
+      "primary_harness",
+      "omnium_route_switching",
+      "openai_models",
+      "repo_editing",
+      "terminal_execution",
+      "skills_orchestration",
+      "research_synthesis",
+      "debugging",
+      "testing",
+      "deployment_planning"
+    ],
+    "vscode": [
+      "open_workspace",
+      "open_pmo_ai",
+      "open_pmo_bot",
+      "local_developer_ui",
+      "tasks_and_settings"
+    ],
+    "kilo": [
+      "free_sidecar_agent",
+      "cloudflare_workers_ai",
+      "pmo_ai_harness",
+      "code_generation",
+      "refactoring",
+      "debugging",
+      "language_support",
+      "vscode_integrated",
+      "local_file_context"
+    ],
+    "codex-skills": [
+      "codex-cloudflare",
+      "codex-cloudflare-access",
+      "codex-wrangler-deploy",
+      "codex-sites-publishing",
+      "codex-website-seo",
+      "codex-reddit-seo",
+      "codex-pmo-bot-ops",
+      "codex-task-library",
+      "codex-command-center",
+      "picassomoes-ops",
+      "pmo-robotics-ops",
+      "halo-ops",
+      "hava-ops",
+      "trader-bae-ops"
+    ]
+  },
+  "routing_rules": [
+    {
+      "priority": 29,
+      "description": "agy handles local research and analysis tasks",
+      "pattern": "research|analyze|search|summarize|compare|investigate|learn|document|report|review",
+      "target": "agy"
+    },
+    {
+      "priority": 25,
+      "description": "Cloudflare Access and private app protection",
+      "pattern": "cloudflare access|zero trust|private app|protect api|protect site|access policy|pmorobotics|api.pmo-bot.com",
+      "target": "codex-cloudflare-access"
+    },
+    {
+      "priority": 24,
+      "description": "Cloudflare Worker and Wrangler deployments",
+      "pattern": "wrangler|worker deploy|cloudflare worker|workers ai|route deploy",
+      "target": "codex-wrangler-deploy"
+    },
+    {
+      "priority": 23,
+      "description": "Sites publishing and website deploys",
+      "pattern": "sites publish|chatgpt site|private staging|website publish|site deploy|hosting.json",
+      "target": "codex-sites-publishing"
+    },
+    {
+      "priority": 22,
+      "description": "Website SEO and local schema",
+      "pattern": "seo|sitemap|robots.txt|schema|json-ld|canonical|local search|website links",
+      "target": "codex-website-seo"
+    },
+    {
+      "priority": 22,
+      "description": "Reddit SEO and community posts",
+      "pattern": "reddit seo|subreddit|r/HillsboroughTattoos|u/Picassomoes|daily reddit|reddit post",
+      "target": "codex-reddit-seo"
+    },
+    {
+      "priority": 22,
+      "description": "PMO Bot operations and paper-trading checks",
+      "pattern": "pmo bot|paper trading|alpaca|broker sync|trade journal|pmo api|pmo health",
+      "target": "codex-pmo-bot-ops"
+    },
+    {
+      "priority": 21,
+      "description": "Personal Codex playbook and reusable prompts",
+      "pattern": "task library|codex playbook|best prompts|prompt library|save this prompt",
+      "target": "codex-task-library"
+    },
+    {
+      "priority": 21,
+      "description": "Daily command center",
+      "pattern": "today command center|daily command center|what should i do today|daily brief|next actions",
+      "target": "codex-command-center"
+    },
+    {
+      "priority": 21,
+      "description": "Picassomoes tattoo operations",
+      "pattern": "picassomoes|tattoo site|hillsborough tattoos|first tattoo guide",
+      "target": "picassomoes-ops"
+    },
+    {
+      "priority": 21,
+      "description": "PMO Robotics private operations",
+      "pattern": "pmo robotics|pmorobotics|robotics access",
+      "target": "pmo-robotics-ops"
+    },
+    {
+      "priority": 20,
+      "description": "Halo project operations",
+      "pattern": "halo site|halo project|halo links",
+      "target": "halo-ops"
+    },
+    {
+      "priority": 20,
+      "description": "Hava project operations",
+      "pattern": "hava site|hava project|ahava|hava links",
+      "target": "hava-ops"
+    },
+    {
+      "priority": 20,
+      "description": "Trader Bae operations",
+      "pattern": "trader bae|traderbae|profile image|trading site",
+      "target": "trader-bae-ops"
+    },
+    {
+      "description": "Default free/local coding route through Kilo Code on Cloudflare Workers AI",
+      "pattern": "free|kilo|pmo ai|pmoai|pmo bot|local code|workers ai|cloudflare|no tokens|out of tokens",
+      "target": "kilo",
+      "priority": 30
+    },
+    {
+      "description": "Codex fallback for deep reasoning, repo edits, deployment, and explicit Codex requests",
+      "pattern": "codex|gpt|openai|omnium|omniroute|deep reasoning|repo edit|complex code|deploy|ci/cd|git",
+      "target": "codex",
+      "priority": 6
+    },
+    {
+      "description": "Free Kilo sidecar for coding and language work",
+      "pattern": "code|devops|infrastructure|debug|test|refactor|python|javascript|typescript|powershell|html|css|json|yaml|toml|markdown",
+      "target": "kilo",
+      "priority": 8
+    },
+    {
+      "description": "Hermes handles memory, scheduling, channels, and recurring workflow tasks",
+      "pattern": "memory|remember|schedule|cron|telegram|discord|channel|notif|reminder|goal mode|goal",
+      "target": "hermes",
+      "priority": 29
+    },
+    {
+      "description": "Default fallback to the free/local Kilo lane",
+      "pattern": ".*",
+      "target": "kilo",
+      "priority": 0
+    }
+  ],
+  "free_agent_stack": {
+    "enabled": true,
+    "primary": "kilo",
+    "free_sidecar": "codex",
+    "kilo_model": "cloudflare-workers-ai/@cf/moonshotai/kimi-k2.7-code",
+    "cloudflare_provider": "cloudflare-workers-ai",
+    "notes": "Prefer Kilo on Cloudflare Workers AI for free/local coding capacity, Hermes for memory/scheduler work, and agy for research. Codex/OmniRoute are fallbacks for complex or explicitly requested work."
   }
 }

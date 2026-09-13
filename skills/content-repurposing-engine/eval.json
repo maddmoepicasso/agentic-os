@@ -1,0 +1,4 @@
+{
+  "criteria": ["message_clarity", "channel_fit", "voice_match", "cta_strength"],
+  "weights": [0.25, 0.25, 0.25, 0.25]
+}

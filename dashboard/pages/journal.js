@@ -38,7 +38,8 @@ async function renderJournal() {
     <div class="journal-entry" id="journalEditor">
       <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
         <div style="font-weight:600;font-size:14px" id="journalDateLabel">${formatDateDisplay(today)}</div>
-        <div>
+        <div style="display:flex;align-items:center;gap:8px">
+          <button class="btn btn-sm" onclick="startVoiceInput('journalText')" type="button">Mic</button>
           <span class="badge badge-info" id="journalSaveStatus">Auto-save on</span>
         </div>
       </div>

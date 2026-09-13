@@ -1,0 +1,4 @@
+{
+  "criteria": ["calendar_clarity", "hook_quality", "platform_fit", "cta_quality"],
+  "weights": [0.25, 0.25, 0.25, 0.25]
+}

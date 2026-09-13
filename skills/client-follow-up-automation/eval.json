@@ -1,0 +1,4 @@
+{
+  "criteria": ["relevance", "tone", "conversion_focus", "brevity"],
+  "weights": [0.3, 0.25, 0.25, 0.2]
+}

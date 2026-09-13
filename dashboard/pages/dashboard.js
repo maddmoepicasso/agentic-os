@@ -18,6 +18,10 @@ async function renderDashboard() {
         <div id="agentList"><div class="skeleton" style="height:100px"></div></div>
       </div>
       <div class="card">
+        <div class="card-header"><span class="card-title">Cloudflare Gateway</span></div>
+        <div id="cloudflareGateway"><div class="skeleton" style="height:100px"></div></div>
+      </div>
+      <div class="card">
         <div class="card-header"><span class="card-title">Recent Activity</span></div>
         <div id="recentActivity"><div class="skeleton" style="height:100px"></div></div>
       </div>
@@ -93,9 +97,63 @@ async function renderDashboard() {
         </div>
       `).join('')}</div>`;
 
+    refreshGatewayStatus();
   } catch (err) {
     document.getElementById('dashStats').innerHTML = `<div class="card" style="grid-column:1/-1"><div class="empty-state"><div class="empty-state-icon">⚠</div><div class="empty-state-title">Connection Error</div><div class="empty-state-desc">${escapeHtml(err.message)}</div><button class="btn btn-primary mt-3" onclick="navigate('dashboard')">Retry</button></div></div>`;
   }
+}
+
+async function refreshGatewayStatus() {
+  const el = document.getElementById('cloudflareGateway');
+  if (!el) return;
+  el.innerHTML = `
+    <div class="agent-card-list">
+      ${gatewayMiniCard('OmniRoute', 'checking', 'Model gateway')}
+      ${gatewayMiniCard('Cloudflare', 'checking', 'Edge route')}
+      ${gatewayMiniCard('Wrangler', 'checking', 'Deploy tool')}
+      ${gatewayMiniCard('Rotator', 'checking', 'Fallback routing')}
+    </div>
+  `;
+
+  const cloudflareStatus = api.getCloudflareStatus();
+  const checks = [
+    api.getOmniumStatus().then(data => ({
+      name: 'OmniRoute',
+      status: data.active_route === 'omniroute' ? 'online' : 'warning',
+      detail: `${data.active_route || 'unknown'} / ${(data.route && data.route.model) || 'default'}`
+    })).catch(err => ({ name: 'OmniRoute', status: 'offline', detail: err.message })),
+    cloudflareStatus.then(data => ({
+      name: 'Cloudflare',
+      status: data.status === 'ready' ? 'online' : 'warning',
+      detail: data.worker_url || (data.env && data.env.account_id_configured ? 'Account configured' : 'Needs setup')
+    })).catch(err => ({ name: 'Cloudflare', status: 'offline', detail: err.message })),
+    cloudflareStatus.then(data => ({
+      name: 'Wrangler',
+      status: data.wrangler ? 'online' : 'offline',
+      detail: data.wrangler_version || 'Not installed'
+    })).catch(err => ({ name: 'Wrangler', status: 'offline', detail: err.message })),
+    api.getRotatorStatus().then(data => ({
+      name: 'Rotator',
+      status: data.status === 'ready' ? 'online' : 'warning',
+      detail: `${data.mode || 'failover'} / Kilo ${data.active_kilo_route || 'unknown'}`
+    })).catch(err => ({ name: 'Rotator', status: 'offline', detail: err.message })),
+  ];
+
+  const results = await Promise.all(checks);
+  if (!document.getElementById('cloudflareGateway')) return;
+  el.innerHTML = `<div class="agent-card-list">${results.map(r => gatewayMiniCard(r.name, r.status, r.detail)).join('')}</div>`;
+}
+
+function gatewayMiniCard(name, status, detail) {
+  const safeStatus = status === 'online' || status === 'offline' || status === 'warning' ? status : 'warning';
+  const sc = statusColor(safeStatus);
+  return `<div class="agent-card">
+    <div class="agent-dot ${safeStatus}" style="width:10px;height:10px"></div>
+    <div>
+      <div style="font-weight:600;font-size:13px">${escapeHtml(name)}</div>
+      <div style="font-size:11px;color:${sc.text}">${escapeHtml(detail || safeStatus)}</div>
+    </div>
+  </div>`;
 }
 
 async function runQuickSkill() {

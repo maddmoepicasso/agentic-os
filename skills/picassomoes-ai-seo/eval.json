@@ -1,0 +1,8 @@
+{
+  "criteria": [
+    {"name": "local_fit", "weight": 0.25, "description": "Uses Picassomoes, Hillsborough, and service context accurately."},
+    {"name": "helpfulness", "weight": 0.25, "description": "Answers real client questions before promoting."},
+    {"name": "safety", "weight": 0.25, "description": "Avoids medical, pricing, and outcome overclaims."},
+    {"name": "reuse_pack", "weight": 0.25, "description": "Creates usable Reddit, website, and social variants."}
+  ]
+}

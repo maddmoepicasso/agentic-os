@@ -1,0 +1,4 @@
+{
+  "criteria": ["specificity", "smallest_working_version", "testability", "business_value"],
+  "weights": [0.25, 0.3, 0.25, 0.2]
+}

@@ -1,4 +1,4 @@
-# Agentic OS — Complete Project Context for AI Agents
+﻿# Agentic OS — Complete Project Context for AI Agents
 
 ## Role Definition
 
@@ -453,3 +453,16 @@ When you (an AI agent) are dropped into this directory for the first time:
 ---
 
 *This AGENTS.md is designed to be the single source of truth. Any AI agent (opencode, Claude Code, agy CLI, Hermes, Cursor, etc.) reading this file should have complete context to continue the project seamlessly.*
+
+---
+
+## Local 2026 Codex/Kilo Route
+
+This machine's practical route is Codex as the primary harness with Kilo, VS Code, and opencode as available helpers. Hermes and agy may be enabled later, but do not assume they are active until `data/settings.json` and `/api/agents/health` confirm it.
+
+Use the Codex-derived skills and business-specific skills before generic routes when the task matches Cloudflare, Cloudflare Access, PMO Bot, Picassomoes, PMO Robotics, Halo, Hava, Trader Bae, Reddit SEO, or daily command-center work.
+
+
+## Herdr Session Runtime
+
+Herdr is available as an optional Agentic OS session runtime. Treat it as the multi-pane terminal workspace for running Codex, Kilo, opencode, agy, logs, and verification side by side. Do not route normal chat tasks to Herdr; launch it when the operator wants persistent multi-agent terminal sessions. Use the dashboard Herdr Sessions tab or start-herdr-windows.cmd.

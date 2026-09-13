@@ -1,1 +1,402 @@
-[]
+[
+  {
+    "timestamp": "2026-09-10T23:02:59-04:00",
+    "run_id": "9a82f3c1",
+    "score": 0.4,
+    "criteria": {
+      "all_agents_online": 0,
+      "alerts_caught": 1,
+      "response_time_under_5s": 0
+    }
+  },
+  {
+    "timestamp": "2026-09-10T23:05:30-04:00",
+    "run_id": "c7b40e21",
+    "score": 0.4,
+    "criteria": {
+      "all_agents_online": 0,
+      "alerts_caught": 1,
+      "response_time_under_5s": 0
+    }
+  },
+  {
+    "timestamp": "2026-09-10T23:10:24-04:00",
+    "run_id": "6db5e2a1",
+    "score": 0.7,
+    "criteria": {
+      "all_agents_online": 0,
+      "alerts_caught": 1,
+      "response_time_under_5s": 1
+    }
+  },
+  {
+    "timestamp": "2026-09-10T23:15:26-04:00",
+    "run_id": "b14f1501",
+    "score": 0.7,
+    "criteria": {
+      "all_agents_online": 0,
+      "alerts_caught": 1,
+      "response_time_under_5s": 1
+    }
+  },
+  {
+    "timestamp": "2026-09-10T23:20:16-04:00",
+    "run_id": "c9201671",
+    "score": 0.7,
+    "criteria": {
+      "all_agents_online": 0,
+      "alerts_caught": 1,
+      "response_time_under_5s": 1
+    }
+  },
+  {
+    "timestamp": "2026-09-10T23:25:35-04:00",
+    "run_id": "ae25c731",
+    "score": 0.4,
+    "criteria": {
+      "all_agents_online": 0,
+      "alerts_caught": 1,
+      "response_time_under_5s": 0
+    }
+  },
+  {
+    "timestamp": "2026-09-10T23:25:38-04:00",
+    "run_id": "71c4b82e",
+    "score": 0.7,
+    "criteria": {
+      "all_agents_online": 0,
+      "alerts_caught": 1,
+      "response_time_under_5s": 1
+    }
+  },
+  {
+    "timestamp": "2026-09-10T23:30:19-04:00",
+    "run_id": "2330c8f1",
+    "score": 0.7,
+    "criteria": {
+      "all_agents_online": 0,
+      "alerts_caught": 1,
+      "response_time_under_5s": 1
+    }
+  },
+  {
+    "timestamp": "2026-09-10T23:30:19-04:00",
+    "run_id": "f4d08b2e",
+    "score": 0.7,
+    "criteria": {
+      "all_agents_online": 0,
+      "alerts_caught": 1,
+      "response_time_under_5s": 1
+    }
+  },
+  {
+    "timestamp": "2026-09-10T23:35:19-04:00",
+    "run_id": "4d35a921",
+    "score": 0.4,
+    "criteria": {
+      "all_agents_online": 0,
+      "alerts_caught": 1,
+      "response_time_under_5s": 0
+    }
+  },
+  {
+    "timestamp": "2026-09-10T23:35:21-04:00",
+    "run_id": "4c9a102c",
+    "score": 0.7,
+    "criteria": {
+      "all_agents_online": 0,
+      "alerts_caught": 1,
+      "response_time_under_5s": 1
+    }
+  },
+  {
+    "timestamp": "2026-09-10T23:40:22-04:00",
+    "run_id": "6fe2a913",
+    "score": 0.7,
+    "criteria": {
+      "all_agents_online": 0,
+      "alerts_caught": 1,
+      "response_time_under_5s": 1
+    }
+  },
+  {
+    "timestamp": "2026-09-10T23:45:23-04:00",
+    "run_id": "c45a23f1",
+    "score": 0.4,
+    "criteria": {
+      "all_agents_online": 0,
+      "alerts_caught": 1,
+      "response_time_under_5s": 0
+    }
+  },
+  {
+    "timestamp": "2026-09-10T23:45:19-04:00",
+    "run_id": "9f27c8a1",
+    "score": 0.7,
+    "criteria": {
+      "all_agents_online": 0,
+      "alerts_caught": 1,
+      "response_time_under_5s": 1
+    }
+  },
+  {
+    "timestamp": "2026-09-10T23:50:19-04:00",
+    "run_id": "f507499b",
+    "score": 0.7,
+    "criteria": {
+      "all_agents_online": 0,
+      "alerts_caught": 1,
+      "response_time_under_5s": 1
+    }
+  },
+  {
+    "timestamp": "2026-09-11T00:22:53-04:00",
+    "run_id": "hb002253",
+    "score": 0.4,
+    "criteria": {
+      "all_agents_online": 0,
+      "alerts_caught": 1,
+      "response_time_under_5s": 0
+    }
+  },
+  {
+    "timestamp": "2026-09-11T00:22:35-04:00",
+    "run_id": "hb002232",
+    "score": 0.7,
+    "criteria": {
+      "all_agents_online": 0,
+      "alerts_caught": 1,
+      "response_time_under_5s": 1
+    }
+  },
+  {
+    "timestamp": "2026-09-11T00:26:07-04:00",
+    "run_id": "hb002607",
+    "score": 0.7,
+    "criteria": {
+      "all_agents_online": 0,
+      "alerts_caught": 1,
+      "response_time_under_5s": 1
+    }
+  },
+  {
+    "timestamp": "2026-09-11T00:31:48-04:00",
+    "run_id": "hb003148",
+    "score": 0.7,
+    "criteria": {
+      "all_agents_online": 0,
+      "alerts_caught": 1,
+      "response_time_under_5s": 1
+    }
+  },
+  {
+    "timestamp": "2026-09-11T00:31:58-04:00",
+    "run_id": "hb003158",
+    "score": 0.7,
+    "criteria": {
+      "all_agents_online": 0,
+      "alerts_caught": 1,
+      "response_time_under_5s": 1
+    }
+  },
+  {
+    "timestamp": "2026-09-11T00:36:46-04:00",
+    "run_id": "hb003646",
+    "score": 0.7,
+    "criteria": {
+      "all_agents_online": 0,
+      "alerts_caught": 1,
+      "response_time_under_5s": 1
+    }
+  },
+  {
+    "timestamp": "2026-09-11T00:36:54-04:00",
+    "run_id": "hb003654",
+    "score": 0.7,
+    "criteria": {
+      "all_agents_online": 0,
+      "alerts_caught": 1,
+      "response_time_under_5s": 1
+    }
+  },
+  {
+    "timestamp": "2026-09-11T00:41:43-04:00",
+    "run_id": "hb004143",
+    "score": 0.7,
+    "criteria": {
+      "all_agents_online": 0,
+      "alerts_caught": 1,
+      "response_time_under_5s": 1
+    }
+  },
+  {
+    "timestamp": "2026-09-11T00:41:57-04:00",
+    "run_id": "hb004157",
+    "score": 0.7,
+    "criteria": {
+      "all_agents_online": 0,
+      "alerts_caught": 1,
+      "response_time_under_5s": 1
+    }
+  },
+  {
+    "timestamp": "2026-09-11T00:46:46-04:00",
+    "run_id": "hb004646",
+    "score": 0.7,
+    "criteria": {
+      "all_agents_online": 0,
+      "alerts_caught": 1,
+      "response_time_under_5s": 1
+    }
+  },
+  {
+    "timestamp": "2026-09-11T00:46:47-04:00",
+    "run_id": "hb004647",
+    "score": 0.4,
+    "criteria": {
+      "all_agents_online": 0,
+      "alerts_caught": 1,
+      "response_time_under_5s": 0
+    }
+  },
+  {
+    "timestamp": "2026-09-11T00:51:39-04:00",
+    "run_id": "hb005139",
+    "score": 0.7,
+    "criteria": {
+      "all_agents_online": 0,
+      "alerts_caught": 1,
+      "response_time_under_5s": 1
+    }
+  },
+  {
+    "timestamp": "2026-09-11T01:01:04-04:00",
+    "run_id": "hb010104",
+    "score": 0.4,
+    "criteria": {
+      "all_agents_online": 0,
+      "alerts_caught": 1,
+      "response_time_under_5s": 0
+    }
+  },
+  {
+    "timestamp": "2026-09-11T01:06:02-04:00",
+    "run_id": "hb010602",
+    "score": 0.7,
+    "criteria": {
+      "all_agents_online": 0,
+      "alerts_caught": 1,
+      "response_time_under_5s": 1
+    }
+  },
+  {
+    "timestamp": "2026-09-11T01:11:05-04:00",
+    "run_id": "hb011105",
+    "score": 0.7,
+    "criteria": {
+      "all_agents_online": 0,
+      "alerts_caught": 1,
+      "response_time_under_5s": 1
+    }
+  },
+  {
+    "timestamp": "2026-09-11T01:16:55-04:00",
+    "run_id": "hb011655",
+    "score": 0.4,
+    "criteria": {
+      "all_agents_online": 0,
+      "alerts_caught": 1,
+      "response_time_under_5s": 0
+    }
+  },
+  {
+    "timestamp": "2026-09-11T01:21:25-04:00",
+    "run_id": "hb012125",
+    "score": 0.4,
+    "criteria": {
+      "all_agents_online": 0,
+      "alerts_caught": 1,
+      "response_time_under_5s": 0
+    }
+  },
+  {
+    "timestamp": "2026-09-11T01:25:45-04:00",
+    "run_id": "hb012545",
+    "score": 0.4,
+    "criteria": {
+      "all_agents_online": 0,
+      "alerts_caught": 1,
+      "response_time_under_5s": 0
+    }
+  },
+  {
+    "timestamp": "2026-09-11T01:30:40-04:00",
+    "run_id": "hb013040",
+    "score": 0.4,
+    "criteria": {
+      "all_agents_online": 0,
+      "alerts_caught": 1,
+      "response_time_under_5s": 0
+    }
+  },
+  {
+    "timestamp": "2026-09-11T01:35:45-04:00",
+    "run_id": "hb013545",
+    "score": 0.4,
+    "criteria": {
+      "all_agents_online": 0,
+      "alerts_caught": 1,
+      "response_time_under_5s": 0
+    }
+  },
+  {
+    "timestamp": "2026-09-11T01:40:43-04:00",
+    "run_id": "hb014043",
+    "score": 0.4,
+    "criteria": {
+      "all_agents_online": 0,
+      "alerts_caught": 1,
+      "response_time_under_5s": 0
+    }
+  },
+  {
+    "timestamp": "2026-09-11T01:45:38-04:00",
+    "run_id": "hb014538",
+    "score": 0.4,
+    "criteria": {
+      "all_agents_online": 0,
+      "alerts_caught": 1,
+      "response_time_under_5s": 0
+    }
+  },
+  {
+    "timestamp": "2026-09-11T01:50:57-04:00",
+    "run_id": "hb015033",
+    "score": 0.4,
+    "criteria": {
+      "all_agents_online": 0,
+      "alerts_caught": 1,
+      "response_time_under_5s": 0
+    }
+  },
+  {
+    "timestamp": "2026-09-11T02:01:17-04:00",
+    "run_id": "hb020117",
+    "score": 0.4,
+    "criteria": {
+      "all_agents_online": 0,
+      "alerts_caught": 1,
+      "response_time_under_5s": 0
+    }
+  },
+  {
+    "timestamp": "2026-09-11T02:06:09-04:00",
+    "run_id": "hb020609",
+    "score": 0.4,
+    "criteria": {
+      "all_agents_online": 0,
+      "alerts_caught": 1,
+      "response_time_under_5s": 0
+    }
+  }
+]

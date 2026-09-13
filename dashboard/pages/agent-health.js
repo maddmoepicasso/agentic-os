@@ -6,7 +6,7 @@ async function renderAgentHealth() {
     <div class="page-header">
       <div class="page-header-left">
         <div class="page-title">Agent Health</div>
-        <div class="page-subtitle">Real-time monitoring of all 3 agents</div>
+        <div class="page-subtitle">Real-time monitoring of all 4 agents</div>
       </div>
       <div class="btn-group">
         <label class="switch" title="Auto-refresh every 5s">
@@ -59,8 +59,8 @@ async function refreshAgentHealth() {
     const agents = data.agents || [];
     const cards = document.getElementById('agentHealthCards');
     if (!cards) return;
-    const agentIcons = { opencode: '🔧', hermes: '⚡', agy: '🧠' };
-    const agentColors = { opencode: 'purple', hermes: 'green', agy: 'blue' };
+    const agentIcons = { codex: '✨', opencode: '🔧', hermes: '⚡', agy: '🧠' };
+    const agentColors = { codex: 'blue', opencode: 'purple', hermes: 'green', agy: 'blue' };
     cards.innerHTML = agents.map(a => `
       <div class="agent-health-card">
         <div class="agent-health-avatar" style="background:var(--${agentColors[a.name] || 'accent'}-dim);color:var(--${agentColors[a.name] || 'accent'})">

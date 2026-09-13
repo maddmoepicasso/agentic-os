@@ -1,0 +1,20 @@
+{
+  "id": "prime-agent-notebook-audit",
+  "name": "Prime Agent Notebook Audit",
+  "description": "Weekly review of Prime Agent and Agent OS saved lessons to remove stale, unsafe, or accidental behavior before it compounds.",
+  "skill": "prime-agent-self-upgrade",
+  "cron": "30 9 * * 0",
+  "enabled": true,
+  "created": "2026-09-13T00:00:00Z",
+  "last_run": null,
+  "next_run": null,
+  "payload": {
+    "objective": "Audit Prime Agent saved lessons and Agent OS skill learnings. Keep useful durable corrections, remove stale or harmful lessons, and flag anything that optimizes for passing checks without fulfilling operator intent.",
+    "risk_level": "low",
+    "quality_gates": [
+      "Every new lesson has an owner, scope, and source run.",
+      "No lesson encourages policy bypasses, unsafe shortcuts, or unverifiable claims.",
+      "Repeated workflows are promoted to skills only after a successful dry run."
+    ]
+  }
+}

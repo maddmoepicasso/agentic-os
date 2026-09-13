@@ -1,0 +1,4 @@
+{
+  "criteria": ["client_fit", "scope_clarity", "commercial_strength", "professionalism"],
+  "weights": [0.25, 0.3, 0.25, 0.2]
+}

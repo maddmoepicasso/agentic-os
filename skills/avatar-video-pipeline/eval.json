@@ -1,0 +1,4 @@
+{
+  "criteria": ["hook_strength", "script_clarity", "production_readiness", "platform_fit"],
+  "weights": [0.25, 0.25, 0.3, 0.2]
+}

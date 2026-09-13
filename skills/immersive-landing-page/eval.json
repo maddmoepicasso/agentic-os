@@ -1,0 +1,9 @@
+{
+  "criteria": [
+    { "name": "offer_relevance", "weight": 0.25 },
+    { "name": "visual_originality", "weight": 0.2 },
+    { "name": "motion_usability", "weight": 0.2 },
+    { "name": "accessibility", "weight": 0.15 },
+    { "name": "verification", "weight": 0.2 }
+  ]
+}

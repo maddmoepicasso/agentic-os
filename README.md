@@ -1,4 +1,4 @@
-<div align="center">
+﻿<div align="center">
   <br/>
   <img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="License: MIT"/>
   <img src="https://img.shields.io/badge/python-3.10+-blue.svg" alt="Python 3.10+"/>
@@ -415,3 +415,31 @@ MIT License — free to use, modify, and distribute.
     <a href="https://github.com/modimihir07/agentic-os">GitHub</a>
   </p>
 </div>
+
+---
+
+## Maurice's Local Setup Notes
+
+This local install has been customized beyond the original template:
+
+- Primary working agents are Codex, Kilo, VS Code, and opencode.
+- Codex is routed through OmniRoute by default: `http://localhost:20128/v1` with model `auto`.
+- Start OmniRoute locally before using the Codex gateway route; it provides the OpenAI-compatible endpoint and provider fallback.
+- Hermes and agy are currently disabled in `data/settings.json`.
+- Codex-derived skills are installed for Cloudflare, Cloudflare Access, Wrangler deploys, Sites publishing, website SEO, Reddit SEO, PMO Bot ops, debugging, review, testing, docs, task-library, and command-center workflows.
+- Business-specific skills exist for Picassomoes, PMO Robotics, Halo, Hava, and Trader Bae.
+- Use `backup-windows.ps1` on Windows before major changes.
+- Keep API keys in environment variables or a local secret store, not plain settings JSON.
+- Daily Picassomoes Reddit SEO and Daily Command Center scheduler jobs are configured in `scheduler/jobs/`.
+
+
+## Herdr Sessions
+
+Agentic OS includes an optional Herdr Sessions tab for launching a persistent multi-agent terminal workspace without leaving the dashboard. Herdr is treated as a session runtime, not a replacement for the normal agent router.
+
+Use it when several agents or terminal checks should run side by side, such as Codex for implementation, Kilo Code for a sidecar pass, opencode or shell for verification, and agy/Codex for research notes.
+
+- Dashboard: open **Herdr Sessions** from Monitoring.
+- Windows fallback: run start-herdr-windows.cmd from this folder.
+- Install command: powershell -ExecutionPolicy Bypass -c "irm https://herdr.dev/install.ps1 | iex"
+- Details: docs/herdr-session-runtime.md

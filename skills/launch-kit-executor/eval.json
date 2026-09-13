@@ -1,0 +1,4 @@
+{
+  "criteria": ["actionability", "prioritization", "asset_clarity", "done_criteria"],
+  "weights": [0.35, 0.25, 0.2, 0.2]
+}

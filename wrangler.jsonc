@@ -1,0 +1,17 @@
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "angelic-os-agent-harness",
+  "account_id": "bd5105f0bc78ad29e8340845e2e6af82",
+  "main": "cloudflare/worker.js",
+  "compatibility_date": "2026-09-11",
+  "compatibility_flags": ["nodejs_compat"],
+  "ai": { "binding": "AI" },
+  "observability": { "enabled": true },
+  "vars": {
+    "ANGELIC_OS_AGENT_STACK": "codex,kilo,opencode,wrangler,cloudflare",
+    "PMO_AI_AGENT": "kilo",
+    "KILO_PRIMARY_ROUTE": "openrouter",
+    "KILO_SAFE_FALLBACK_ROUTE": "cloudflare-workers-ai"
+  }
+}
+

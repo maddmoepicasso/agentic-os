@@ -1,0 +1,1 @@
+{"criteria":[{"name":"cluster_logic","weight":0.3,"description":"Creates a coherent topic structure."},{"name":"business_alignment","weight":0.25,"description":"Prioritizes topics that support the offer."},{"name":"internal_links","weight":0.25,"description":"Defines useful internal links."},{"name":"publishing_order","weight":0.2,"description":"Gives a practical sequence."}]}

@@ -1,0 +1,4 @@
+{
+  "criteria": ["extraction_accuracy", "prioritization_quality", "routing_fit", "next_action_clarity"],
+  "weights": [0.25, 0.3, 0.25, 0.2]
+}

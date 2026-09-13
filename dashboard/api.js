@@ -1,4 +1,4 @@
-const api = {
+﻿const api = {
   async get(path) {
     const r = await fetch(path);
     if (!r.ok) { const e = await r.json().catch(() => ({})); throw new Error(e.detail || `Request failed: ${r.status}`); }
@@ -27,6 +27,12 @@ const api = {
     return r.json();
   },
   getStatus: () => api.get('/api/status'),
+  getCloudflareStatus: () => api.get('/api/cloudflare/status'),
+  getPublishingStatus: () => api.get('/api/publishing/status'),
+  getOmniumStatus: () => api.get('/api/omnium/status'),
+  getRotatorStatus: () => api.get('/api/rotator/status'),
+  getObsidianStatus: () => api.get('/api/obsidian/status'),
+  saveObsidianNote: (data) => api.post('/api/obsidian/save', data),
   getBrain: () => api.get('/api/brain'),
   getBrainFile: (name) => api.get(`/api/brain/${encodeURIComponent(name)}`),
   updateBrainFile: (name, content) => api.put(`/api/brain/${encodeURIComponent(name)}`, { content }),
@@ -46,6 +52,9 @@ const api = {
   createBackup: () => api.post('/api/backup'),
   restoreBackup: (file) => api.post('/api/backup/restore', { file }),
   getPrompts: () => api.get('/api/prompts'),
+  fetchVideoIntake: (data) => api.post('/api/video-intake/fetch', data),
+  saveVideoBrief: (data) => api.post('/api/video-intake/brief', data),
+  getVideoBriefs: () => api.get('/api/video-intake/briefs'),
   getSettings: () => api.get('/api/settings'),
   updateSettings: (settings) => api.put('/api/settings', { settings }),
   getStandards: () => api.get('/api/standards'),
@@ -96,6 +105,8 @@ const api = {
   searchJournal: (query) => api.get(`/api/journal/search?q=${encodeURIComponent(query)}`),
   // Agent Health
   getAgentHealth: () => api.get('/api/agents/health'),
+  getHerdrStatus: () => api.get('/api/herdr/status'),
+  launchHerdr: (workspace) => api.post('/api/herdr/launch', workspace ? { workspace } : {}),
   getAgentStats: (name) => api.get(`/api/agents/${encodeURIComponent(name)}/stats`),
   refreshAgentHealth: () => api.post('/api/agents/health/refresh', {}),
   // Smart Router
@@ -126,3 +137,6 @@ const api = {
   // v0.4.0: Code Diff Viewer
   getDiff: (file, ref = 'HEAD') => api.get(`/api/diff?file=${encodeURIComponent(file)}&ref=${encodeURIComponent(ref)}`),
 };
+
+
+

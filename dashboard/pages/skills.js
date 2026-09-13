@@ -157,7 +157,8 @@ async function quickRunSkill(encodedName) {
     <div class="form-group">
       <label class="form-label">Agent</label>
       <select id="qrsAgent" class="form-select">
-        <option value="auto">Auto-detect</option>
+        <option value="auto">Auto -> Codex</option>
+        <option value="codex">Codex (OpenAI)</option>
         <option value="opencode">opencode</option>
         <option value="hermes">Hermes</option>
         <option value="agy">agy (Antigravity)</option>
@@ -237,3 +238,4 @@ async function loadDiff() {
     result.innerHTML = `<div class="empty-state" style="padding:16px"><div class="empty-state-icon">⚠</div><div class="empty-state-title">Error</div><div class="empty-state-desc">${escapeHtml(err.message)}</div></div>`;
   }
 }
+

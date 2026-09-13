@@ -12,7 +12,7 @@
 <meta name="theme-color" content="#6c5ce7">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="styles.css?v=0.4.0">
+<link rel="stylesheet" href="styles.css?v=0.4.5">
 </head>
 <body>
   <div id="topLoadingBar"></div>
@@ -38,8 +38,17 @@
       <div class="sidebar-section"><div class="sidebar-section-label">Primary</div></div>
       <a href="#chat" class="nav-item" data-page="chat"><span class="nav-icon">💬</span><span class="nav-label">AI Chat</span></a>
       <a href="#history" class="nav-item" data-page="history"><span class="nav-icon">🕘</span><span class="nav-label">Chat History</span></a>
+      <a href="#media-studio" class="nav-item" data-page="media-studio"><span class="nav-icon">🎨</span><span class="nav-label">Media Studio</span></a>
+      <a href="#pmo-ai" class="nav-item" data-page="pmo-ai"><span class="nav-icon">🤖</span><span class="nav-label">PMO AI</span></a>
       <a href="#dashboard" class="nav-item active" data-page="dashboard"><span class="nav-icon">◉</span><span class="nav-label">Dashboard</span></a>
       <div class="sidebar-section"><div class="sidebar-section-label">Agents</div></div>
+      <a href="#agent-codex" class="nav-item" data-page="agent-codex"><span class="nav-icon">CX</span><span class="nav-label">Codex</span></a>
+      <a href="#agent-kilo" class="nav-item" data-page="agent-kilo"><span class="nav-icon">KC</span><span class="nav-label">Kilo Code</span></a>
+      <a href="#agent-vscode" class="nav-item" data-page="agent-vscode"><span class="nav-icon">VS</span><span class="nav-label">VS Code</span></a>
+      <a href="#agent-opencode" class="nav-item" data-page="agent-opencode"><span class="nav-icon">OC</span><span class="nav-label">opencode</span></a>
+      <a href="#deepseek-harness" class="nav-item" data-page="deepseek-harness"><span class="nav-icon">DS</span><span class="nav-label">DeepSeek Harness</span></a>
+      <a href="#agent-hermes" class="nav-item" data-page="agent-hermes"><span class="nav-icon">HM</span><span class="nav-label">Hermes</span></a>
+      <a href="#agent-agy" class="nav-item" data-page="agent-agy"><span class="nav-icon">AG</span><span class="nav-label">agy</span></a>
       <a href="#skills" class="nav-item" data-page="skills"><span class="nav-icon">⚡</span><span class="nav-label">Skills</span><span class="nav-badge" id="skillCount">0</span></a>
       <a href="#memory" class="nav-item" data-page="memory"><span class="nav-icon">🧠</span><span class="nav-label">Memory</span></a>
       <a href="#scheduler" class="nav-item" data-page="scheduler"><span class="nav-icon">⏱</span><span class="nav-label">Scheduler</span></a>
@@ -53,6 +62,7 @@
       <a href="#smart-router" class="nav-item" data-page="smart-router"><span class="nav-icon">🧭</span><span class="nav-label">Smart Router</span></a>
       <a href="#learning-analytics" class="nav-item" data-page="learning-analytics"><span class="nav-icon">📊</span><span class="nav-label">Learning Analytics</span></a>
       <a href="#session-replay" class="nav-item" data-page="session-replay"><span class="nav-icon">🔄</span><span class="nav-label">Session Replay</span></a>
+      <a href="#herdr" class="nav-item" data-page="herdr"><span class="nav-icon">HD</span><span class="nav-label">Herdr Sessions</span></a>
       <a href="#errors" class="nav-item" data-page="errors"><span class="nav-icon">⚠</span><span class="nav-label">Error Dashboard</span><span class="nav-badge" id="errorCount">0</span></a>
       <div class="sidebar-section"><div class="sidebar-section-label">Management</div></div>
       <a href="#cost" class="nav-item" data-page="cost"><span class="nav-icon">💰</span><span class="nav-label">Cost Analytics</span></a>
@@ -102,9 +112,9 @@
     <a href="#errors" class="bottom-nav-item" data-page="errors"><span class="bottom-nav-icon">⚠</span><span class="bottom-nav-label">Errors</span></a>
   </nav>
 
-  <script src="utils.js?v=0.4.1"></script>
-  <script src="api.js?v=0.4.1"></script>
-  <script src="app.js?v=0.4.1"></script>
+  <script src="utils.js?v=0.4.5"></script>
+  <script src="api.js?v=0.4.5"></script>
+  <script src="app.js?v=0.4.5"></script>
   <script>
     // Purge any stale service workers/caches from earlier sessions (v0.4.1)
     (function purgeStaleSW() {
@@ -122,3 +132,7 @@
   </script>
 </body>
 </html>
+
+
+
+

@@ -100,3 +100,19 @@ YESTERDAY (May 17):
 - Multiple daily-standup skill runs across opencode + Hermes (runs 7215be12 through a6d21650)
 - Heartbeat tested successfully
 - Chat interactions across all 3 a
+
+## 2026-09-11 (Run 937cc98f)
+- Agent: codex
+- Input: Triggered by cron.
+- Output: 2026-09-11T13:00:00.243296Z ERROR codex_models_manager::cache: failed to load models cache: missing field `base_instructions` at line 132 column 5
+2026-09-11T13:00:00.886323Z  WARN codex_core_plugins::manifest: ignoring hooks: expected a string, string array, object, or object array; found object
+2026-09-11T13:00:00.887705Z  WARN codex_core_plugins::manifest: ignoring hooks: expected a string, string array, object, or object array; found object
+2026-09-11T13:00:00.888250Z  WARN codex_core_plugin
+
+## 2026-09-12 (Run ca0e9d26)
+- Agent: codex
+- Input: Triggered by cron.
+- Output: 2026-09-12T13:00:00.273216Z ERROR codex_models_manager::cache: failed to load models cache: missing field `base_instructions` at line 133 column 5
+2026-09-12T13:00:00.730526Z  WARN codex_models_manager::model_info: Unknown model auto is used. This will use fallback model metadata.
+2026-09-12T13:00:00.732108Z  WARN codex_core_plugins::manifest: ignoring hooks: expected a string, string array, object, or object array; found object
+2026-09-12T13:00:00.733697Z  WARN codex_core_plugins::manifest: ign

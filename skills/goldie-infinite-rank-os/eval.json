@@ -1,0 +1,8 @@
+{
+  "criteria": [
+    {"name": "complete_loop", "weight": 0.3, "description": "Covers keyword, draft, publish, index, memory, and review steps."},
+    {"name": "seo_quality", "weight": 0.25, "description": "Produces useful intent, structure, linking, meta, and CTA guidance."},
+    {"name": "tool_honesty", "weight": 0.2, "description": "Does not claim integrations or rankings that are not verified."},
+    {"name": "actionability", "weight": 0.25, "description": "Creates clear next steps the user can run inside Angelic OS."}
+  ]
+}

@@ -19,6 +19,7 @@ Agentic OS is a multi-agent orchestration platform that coordinates opencode, He
 ## Key Relationships
 - User: Developer — AI/ML and DevOps enthusiast
 - Tool stack: opencode, Hermes Agent, Gemini CLI, deepseek-v4-flash-free
+- Lab harness lane: DeepSeek Harness (`npx @deepseek-ai/dsh web`) for plugin-composed compatibility checks, Trajectory review, and disposable non-production tests only.
 - Active projects: CloudMart (GCP DevOps), Agentic OS
 
 ## Standing Decisions
@@ -31,3 +32,6 @@ Agentic OS is a multi-agent orchestration platform that coordinates opencode, He
 - No vendor lock-in — markdown files are the source of truth
 - No paid services requiring credit cards
 - No opaque black-box agents — everything is auditable
+
+
+

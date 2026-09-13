@@ -1,13 +1,50 @@
 const pageCache = {};
 
-const APP_VERSION = '0.4.1';
+const APP_VERSION = '0.4.5';
+
+const PAGE_TITLES = {
+  dashboard: { title: 'Dashboard', breadcrumb: 'Overview' },
+  chat: { title: 'AI Chat', breadcrumb: 'Talk to Codex, Kilo, and Angelic OS agents' },
+  'agent-codex': { title: 'Codex', breadcrumb: 'OpenAI coding agent' },
+  'agent-kilo': { title: 'Kilo Code', breadcrumb: 'Free coding sidecar' },
+  'agent-vscode': { title: 'VS Code', breadcrumb: 'Local workspace opener' },
+  'agent-opencode': { title: 'opencode', breadcrumb: 'DevOps and code agent' },
+  'deepseek-harness': { title: 'DeepSeek Harness', breadcrumb: 'Plugin-composed local agent harness' },
+  'agent-hermes': { title: 'Hermes', breadcrumb: 'Memory and scheduling agent' },
+  'agent-agy': { title: 'agy', breadcrumb: 'Research and analysis agent' },
+  history: { title: 'Chat History', breadcrumb: 'Review prior agent sessions' },
+  'media-studio': { title: 'Media Studio', breadcrumb: 'Generate images and creative assets' },
+  'video-intake': { title: 'Video Intake', breadcrumb: 'Turn YouTube transcripts into implementation briefs' },
+  'pmo-ai': { title: 'PMO AI', breadcrumb: 'Kilo-powered PMO AI harness' },
+  skills: { title: 'Skills', breadcrumb: 'Installed skills and capabilities' },
+  memory: { title: 'Memory', breadcrumb: 'Persistent knowledge and notes' },
+  scheduler: { title: 'Scheduler', breadcrumb: 'Timed jobs and automations' },
+  audit: { title: 'Audit', breadcrumb: 'System audit trail' },
+  kanban: { title: 'Kanban Board', breadcrumb: 'Plan and track work' },
+  goals: { title: 'Goals', breadcrumb: 'Goal mode and progress' },
+  journal: { title: 'Journal', breadcrumb: 'Notes and reflections' },
+  'agent-health': { title: 'Agent Health', breadcrumb: 'Monitor agent status' },
+  'smart-router': { title: 'Smart Router', breadcrumb: 'Agent and model routing' },
+  'learning-analytics': { title: 'Learning Analytics', breadcrumb: 'Usage and learning insights' },
+  'session-replay': { title: 'Session Replay', breadcrumb: 'Replay previous sessions' },
+  herdr: { title: 'Herdr Sessions', breadcrumb: 'Multi-agent terminal sessions' },
+  errors: { title: 'Error Dashboard', breadcrumb: 'Errors and recovery' },
+  cost: { title: 'Cost Analytics', breadcrumb: 'Token and provider costs' },
+  plugins: { title: 'Plugins', breadcrumb: 'Installed plugins and integrations' },
+  backups: { title: 'Backups', breadcrumb: 'Backup and restore points' },
+  prompts: { title: 'Prompts', breadcrumb: 'Prompt library' },
+  standards: { title: 'Standards', breadcrumb: 'Project rules and standards' },
+  settings: { title: 'Settings', breadcrumb: 'Keys, providers, and preferences' },
+  'setup-wizard': { title: 'Setup Wizard', breadcrumb: 'Guided Angelic OS setup' },
+};
 
 const PAGE_BASE = '/dashboard/pages/';
 
 async function loadPage(name) {
   if (pageCache[name]) return pageCache[name];
   try {
-    await loadScript(`${PAGE_BASE}${name}.js`);
+    const scriptName = name.startsWith('agent-') ? 'agent' : name;
+    await loadScript(`${PAGE_BASE}${scriptName}.js`);
     pageCache[name] = true;
   } catch (err) {
     showToast(`Failed to load page: ${name}`, 'error');
@@ -48,7 +85,9 @@ async function navigate(page) {
 
   try {
     await loadPage(hash);
-    const renderFn = window[`render${capitalize(hash.replace(/-./g, m => m[1].toUpperCase()))}`];
+    const renderFn = hash.startsWith('agent-')
+      ? () => window.renderAgent(hash.replace('agent-', ''))
+      : window[`render${capitalize(hash.replace(/-./g, m => m[1].toUpperCase()))}`];
     if (renderFn) {
       content.innerHTML = '';
       content.className = 'page-content page-enter';
@@ -94,3 +133,9 @@ window.addEventListener('DOMContentLoaded', () => {
   updateAgentStatus();
   setInterval(updateAgentStatus, 15000);
 });
+
+
+
+
+
+

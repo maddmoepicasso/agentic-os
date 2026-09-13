@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Agentic OS — Event-Driven Scheduler Engine
+"""Agentic OS â€” Event-Driven Scheduler Engine
 
 File watcher + cron-based scheduler with execution history.
 Handles job reloading, webhook triggers, skill execution events.
@@ -7,6 +7,8 @@ Handles job reloading, webhook triggers, skill execution events.
 import json
 import os
 import subprocess
+import urllib.error
+import urllib.request
 import sys
 import threading
 import time
@@ -40,25 +42,47 @@ def emit_event(event: dict):
             pass
     _save_history(event)
 
+def _load_history() -> list:
+    if not HISTORY_FILE.exists():
+        return []
+    try:
+        data = json.loads(HISTORY_FILE.read_text())
+        return data if isinstance(data, list) else []
+    except json.JSONDecodeError:
+        backup = HISTORY_FILE.with_suffix(HISTORY_FILE.suffix + f".broken-{int(time.time())}.bak")
+        try:
+            HISTORY_FILE.replace(backup)
+        except Exception:
+            pass
+        return []
+
 def _save_history(event: dict):
-    history = []
-    if HISTORY_FILE.exists():
-        history = json.loads(HISTORY_FILE.read_text())
+    history = _load_history()
     history.append(event)
     if len(history) > 1000:
         history = history[-1000:]
     HISTORY_FILE.write_text(json.dumps(history, indent=2))
 
 def get_history(limit: int = 100) -> list:
-    if not HISTORY_FILE.exists():
-        return []
-    history = json.loads(HISTORY_FILE.read_text())
+    history = _load_history()
     return history[-limit:]
+
+def _load_job_file(path: Path) -> Optional[dict]:
+    try:
+        raw = path.read_text(encoding="utf-8-sig").strip()
+        if not raw:
+            return None
+        data = json.loads(raw)
+        return data if isinstance(data, dict) else None
+    except (json.JSONDecodeError, OSError, UnicodeDecodeError):
+        return None
 
 def load_job_definitions() -> list:
     jobs = []
     for f in sorted(JOBS_DIR.glob("*.json")):
-        data = json.loads(f.read_text())
+        data = _load_job_file(f)
+        if data is None:
+            continue
         data["_file"] = str(f)
         jobs.append(data)
     return jobs
@@ -76,28 +100,59 @@ def get_job_by_name(name: str) -> Optional[dict]:
     return None
 
 def run_skill(skill_name: str, trigger: str = "scheduler", input_text: str = ""):
-    """Execute a skill via the API."""
+    """Execute a skill through the Agentic OS API using Codex as primary agent."""
     audit_file = BASE_DIR.parent / "audit" / "audit.log"
     timestamp = datetime.now(timezone.utc).isoformat()
     entry = {
         "action": "scheduler_run",
         "skill": skill_name,
         "trigger": trigger,
+        "agent": "codex",
         "timestamp": timestamp,
     }
     with open(audit_file, "a") as f:
         f.write(json.dumps(entry) + "\n")
+
     emit_event({
         "type": "skill_run",
         "skill": skill_name,
         "trigger": trigger,
+        "agent": "codex",
         "status": "started",
     })
-    print(f"[{timestamp}] Skill '{skill_name}' triggered by {trigger}")
-    return {"status": "triggered", "skill": skill_name, "trigger": trigger}
 
+    payload = json.dumps({"agent": "codex", "input": input_text or f"Triggered by {trigger}."}).encode("utf-8")
+    request = urllib.request.Request(
+        f"http://127.0.0.1:8080/api/skills/{skill_name}/run",
+        data=payload,
+        headers={"Content-Type": "application/json"},
+        method="POST",
+    )
+    try:
+        with urllib.request.urlopen(request, timeout=240) as response:
+            result = json.loads(response.read().decode("utf-8"))
+        emit_event({
+            "type": "skill_run",
+            "skill": skill_name,
+            "trigger": trigger,
+            "agent": "codex",
+            "status": "completed",
+            "run_id": result.get("run_id"),
+        })
+        print(f"[{timestamp}] Skill '{skill_name}' completed by Codex via {trigger}")
+        return result
+    except Exception as e:
+        emit_event({
+            "type": "skill_run",
+            "skill": skill_name,
+            "trigger": trigger,
+            "agent": "codex",
+            "status": "failed",
+            "error": str(e),
+        })
+        return {"status": "failed", "skill": skill_name, "trigger": trigger, "agent": "codex", "error": str(e)}
 
-# ─── File Watcher ─────────────────────────────────────────────
+# â”€â”€â”€ File Watcher â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 class JobFileWatcher:
     """Watch scheduler/jobs/ for changes and notify listeners."""
@@ -138,7 +193,7 @@ class JobFileWatcher:
             self._scan()
 
 
-# ─── Cron Scheduler ────────────────────────────────────────────
+# â”€â”€â”€ Cron Scheduler â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 class CronScheduler:
     """Simple in-process cron scheduler using APScheduler."""
@@ -151,7 +206,7 @@ class CronScheduler:
             from apscheduler.schedulers.background import BackgroundScheduler as BS
             from apscheduler.triggers.cron import CronTrigger as CT
         except ImportError:
-            print("APScheduler not found — auto-installing...")
+            print("APScheduler not found â€” auto-installing...")
             try:
                 subprocess.check_call(
                     [sys.executable, "-m", "pip", "install", "apscheduler", "--quiet"]
@@ -198,7 +253,7 @@ class CronScheduler:
         print(f"  Scheduled {count} jobs")
 
 
-# ─── Standalone Entry ─────────────────────────────────────────
+# â”€â”€â”€ Standalone Entry â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 def main():
     scheduler = CronScheduler()
@@ -212,3 +267,7 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+
+
+

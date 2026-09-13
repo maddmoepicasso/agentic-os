@@ -127,6 +127,182 @@
       "author": "Agentic OS",
       "installed": "2026-05-17T00:00:00Z",
       "type": "built-in"
+    },
+    {
+      "name": "codex-cloudflare",
+      "version": "1.0.0",
+      "description": "Plan, inspect, and operate Cloudflare Workers, Pages, DNS, storage, tunnels, and infrastructure safely.",
+      "author": "Codex",
+      "installed": "2026-09-12T10:09:50Z",
+      "type": "codex-derived"
+    },
+    {
+      "name": "codex-cloudflare-access",
+      "version": "1.0.0",
+      "description": "Configure and audit Cloudflare Access and Zero Trust protection for private apps and API routes.",
+      "author": "Codex",
+      "installed": "2026-09-12T10:09:50Z",
+      "type": "codex-derived"
+    },
+    {
+      "name": "codex-wrangler-deploy",
+      "version": "1.0.0",
+      "description": "Use Wrangler safely for Cloudflare Worker and asset deployments.",
+      "author": "Codex",
+      "installed": "2026-09-12T10:09:50Z",
+      "type": "codex-derived"
+    },
+    {
+      "name": "codex-sites-publishing",
+      "version": "1.0.0",
+      "description": "Build and publish Sites-hosted websites while preserving project IDs and private/public audience settings.",
+      "author": "Codex",
+      "installed": "2026-09-12T10:09:50Z",
+      "type": "codex-derived"
+    },
+    {
+      "name": "codex-website-seo",
+      "version": "1.0.0",
+      "description": "Add practical technical SEO and content foundations to a website.",
+      "author": "Codex",
+      "installed": "2026-09-12T10:09:50Z",
+      "type": "codex-derived"
+    },
+    {
+      "name": "codex-reddit-seo",
+      "version": "1.0.0",
+      "description": "Create ethical Reddit SEO workflows for useful community posts and local business discovery.",
+      "author": "Codex",
+      "installed": "2026-09-12T10:09:50Z",
+      "type": "codex-derived"
+    },
+    {
+      "name": "codex-pmo-bot-ops",
+      "version": "1.0.0",
+      "description": "Operate PMO Bot safely with paper-trading guardrails, broker checks, and deployment health verification.",
+      "author": "Codex",
+      "installed": "2026-09-12T10:09:50Z",
+      "type": "codex-derived"
+    },
+    {
+      "name": "codex-debug",
+      "version": "1.0.0",
+      "description": "Reproduce, isolate, fix, and verify software failures with a disciplined debugging loop.",
+      "author": "Codex",
+      "installed": "2026-09-12T10:09:50Z",
+      "type": "codex-derived"
+    },
+    {
+      "name": "codex-code-review",
+      "version": "1.0.0",
+      "description": "Review code for correctness, security, regressions, and missing tests.",
+      "author": "Codex",
+      "installed": "2026-09-12T10:09:50Z",
+      "type": "codex-derived"
+    },
+    {
+      "name": "codex-deploy-checklist",
+      "version": "1.0.0",
+      "description": "Pre-deployment and post-deployment checklist for safer releases.",
+      "author": "Codex",
+      "installed": "2026-09-12T10:09:50Z",
+      "type": "codex-derived"
+    },
+    {
+      "name": "codex-docs",
+      "version": "1.0.0",
+      "description": "Write concise technical docs, runbooks, handoffs, and setup notes.",
+      "author": "Codex",
+      "installed": "2026-09-12T10:09:50Z",
+      "type": "codex-derived"
+    },
+    {
+      "name": "codex-testing-strategy",
+      "version": "1.0.0",
+      "description": "Choose and run tests proportional to risk, from smoke checks to broader regression coverage.",
+      "author": "Codex",
+      "installed": "2026-09-12T10:09:50Z",
+      "type": "codex-derived"
+    },
+    {
+      "name": "codex-task-library",
+      "version": "1.0.0",
+      "description": "Build and maintain a personal Codex playbook of reusable high-performing task prompts.",
+      "author": "Codex",
+      "installed": "2026-09-12T10:20:35Z",
+      "type": "codex-derived"
+    },
+    {
+      "name": "picassomoes-ops",
+      "version": "1.0.0",
+      "description": "Run Picassomoes tattoo site, Reddit SEO, local content, launch checks, and booking-growth tasks.",
+      "author": "Codex",
+      "installed": "2026-09-12T10:28:03Z",
+      "type": "business"
+    },
+    {
+      "name": "pmo-robotics-ops",
+      "version": "1.0.0",
+      "description": "Operate PMO Robotics as a private Cloudflare Access-protected project.",
+      "author": "Codex",
+      "installed": "2026-09-12T10:28:03Z",
+      "type": "business"
+    },
+    {
+      "name": "halo-ops",
+      "version": "1.0.0",
+      "description": "Track Halo project links, website status, Cloudflare access, and next actions.",
+      "author": "Codex",
+      "installed": "2026-09-12T10:28:03Z",
+      "type": "business"
+    },
+    {
+      "name": "hava-ops",
+      "version": "1.0.0",
+      "description": "Track Hava project links, website status, Cloudflare access, and next actions.",
+      "author": "Codex",
+      "installed": "2026-09-12T10:28:03Z",
+      "type": "business"
+    },
+    {
+      "name": "trader-bae-ops",
+      "version": "1.0.0",
+      "description": "Run Trader Bae site repair, deployment checks, image/profile QA, and Cloudflare publishing tasks.",
+      "author": "Codex",
+      "installed": "2026-09-12T10:28:03Z",
+      "type": "business"
+    },
+    {
+      "name": "codex-command-center",
+      "version": "1.0.0",
+      "description": "Produce a daily command center view of active projects, blockers, automations, and next actions.",
+      "author": "Codex",
+      "installed": "2026-09-12T10:28:03Z",
+      "type": "business"
+    },
+    {
+      "name": "immersive-landing-page",
+      "version": "1.0.0",
+      "description": "Build distinctive, asset-led landing pages with native image generation, scroll motion, quiet view, visual QA, and versioned presentation notes.",
+      "author": "Codex",
+      "installed": "2026-09-13T10:37:52Z",
+      "type": "codex-derived"
+    },
+    {
+      "name": "deepseek-harness-lab",
+      "version": "0.1.0",
+      "description": "Agent OS lab notes for DeepSeek Harness: local Web UI, plugin-composed runtime, Trajectory review, compatibility checks, and no-autopilot guardrails.",
+      "author": "Codex",
+      "installed": "2026-09-13T11:05:00Z",
+      "type": "experimental-harness"
+    },
+    {
+      "name": "prime-agent-self-upgrade",
+      "version": "1.0.0",
+      "description": "Prime Agent self-upgrade loop with clean memory, saved lessons, quality gates, weekly notebook audit, and skill promotion.",
+      "author": "Codex",
+      "installed": "2026-09-13T00:00:00Z",
+      "type": "codex-derived"
     }
   ]
 }

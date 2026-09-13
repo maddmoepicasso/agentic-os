@@ -1,0 +1,4 @@
+{
+  "criteria": ["risk_detection", "test_plan_quality", "fix_relevance", "clarity"],
+  "weights": [0.3, 0.3, 0.25, 0.15]
+}

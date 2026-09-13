@@ -1,0 +1,11 @@
+﻿{
+  "id": "daily-command-center",
+  "name": "Daily Command Center",
+  "skill": "codex-command-center",
+  "cron": "30 8 * * *",
+  "enabled": true,
+  "created": "2026-09-12T00:00:00Z",
+  "last_run": null,
+  "next_run": null,
+  "description": "Build a plain-English daily list of top projects, blockers, and next actions."
+}

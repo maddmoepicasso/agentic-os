@@ -109,27 +109,26 @@ function renderSkeleton(count = 3) {
   ).join('');
 }
 
-const PAGE_TITLES = {
-  dashboard: { title: 'Dashboard', breadcrumb: 'Overview' },
-  skills: { title: 'Skills Hub', breadcrumb: 'Browse & execute skills' },
-  memory: { title: 'Memory', breadcrumb: 'Shared brain context' },
-  scheduler: { title: 'Scheduler', breadcrumb: 'Automated workflows' },
-  audit: { title: 'Audit Log', breadcrumb: 'System activity trail' },
-  cost: { title: 'Cost Analytics', breadcrumb: 'Usage & spending' },
-  plugins: { title: 'Plugin Registry', breadcrumb: 'Manage plugins' },
-  backups: { title: 'Backups', breadcrumb: 'Disaster recovery' },
-  prompts: { title: 'Prompt Library', breadcrumb: 'Reusable templates' },
-  standards: { title: 'Standards', breadcrumb: 'Project conventions' },
-  settings: { title: 'Settings', breadcrumb: 'Configuration' },
-  'setup-wizard': { title: 'Setup Wizard', breadcrumb: 'Guided configuration' },
-  chat: { title: 'AI Chat', breadcrumb: 'Multi-agent terminal' },
-  history: { title: 'Chat History', breadcrumb: 'Browse & replay conversations' },
-  errors: { title: 'Error Dashboard', breadcrumb: 'System errors & circuit breaker' },
-  kanban: { title: 'Kanban Board', breadcrumb: 'Multi-agent task management' },
-  goals: { title: 'Goals', breadcrumb: 'Project targets and progress' },
-  journal: { title: 'Journal', breadcrumb: 'Daily entries and notes' },
-  'agent-health': { title: 'Agent Health', breadcrumb: 'Real-time agent monitoring' },
-  'smart-router': { title: 'Smart Router', breadcrumb: 'Task routing intelligence' },
-  'learning-analytics': { title: 'Learning Analytics', breadcrumb: 'Skill improvement tracking' },
-  'session-replay': { title: 'Session Replay', breadcrumb: 'Conversation history playback' },
-};
+function startVoiceInput(targetId) {
+  const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if (!SpeechRecognition) {
+    showToast('Voice input is not supported in this browser.', 'warning');
+    return;
+  }
+  const target = document.getElementById(targetId);
+  if (!target) return;
+  const recognition = new SpeechRecognition();
+  recognition.lang = 'en-US';
+  recognition.interimResults = false;
+  recognition.continuous = false;
+  recognition.onstart = () => showToast('Listening...', 'info');
+  recognition.onerror = event => showToast(`Voice input stopped: ${event.error}`, 'warning');
+  recognition.onresult = event => {
+    const text = Array.from(event.results).map(result => result[0].transcript).join(' ');
+    const spacer = target.value && !target.value.endsWith(' ') ? ' ' : '';
+    target.value = `${target.value}${spacer}${text}`;
+    target.dispatchEvent(new Event('input', { bubbles: true }));
+    target.focus();
+  };
+  recognition.start();
+}
