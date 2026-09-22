@@ -2,38 +2,6 @@
 
 > Older run history was archived to `data/history/skill-learnings`.
 
-## 2026-09-21 (Run 023c2cf9)
-- Agent: codex
-- Input: Triggered by cron.
-- Output: {
-  "skill": "heartbeat",
-  "status": "blocked",
-  "checks": {
-    "agents_online": {"pass": null, "status": "unverified"},
-    "disk_below_90_percent": {"pass": null, "status": "unverified"},
-    "memory_below_80_percent": {"pass": null, "status": "unverified"},
-    "audit_without_recent_errors": {"pass": null, "status": "unverified"}
-  },
-  "reason": "Prior local execution attempts were denied by policy. No new checks were attempted.",
-  "notes_updated": false,
-  "next_action": "Run heartbeat 
-
-## 2026-09-21 (Run 9ab27d92)
-- Agent: codex
-- Input: Triggered by cron.
-- Output: {
-  "skill": "heartbeat",
-  "status": "blocked",
-  "checks": {
-    "agents_online": {"pass": null, "status": "unverified"},
-    "disk_below_90_percent": {"pass": null, "status": "unverified"},
-    "memory_below_80_percent": {"pass": null, "status": "unverified"},
-    "audit_without_recent_errors": {"pass": null, "status": "unverified"}
-  },
-  "reason": "Prior local execution attempts were denied by policy. No new checks were attempted.",
-  "notes_updated": false,
-  "next_action": "Run heartbeat 
-
 ## 2026-09-21 (Run 6f9198f1)
 - Agent: codex
 - Input: Triggered by cron.
@@ -5010,3 +4978,39 @@
   "reason": "Local inspection was previously denied by execution policy; no permission change is present. No new checks were run.",
   "files_updated": false,
   "next_action": "An operator must provide a 
+
+## 2026-09-22 (Run 984f02e5)
+- Agent: codex
+- Input: Triggered by cron.
+- Output: {
+  "skill": "heartbeat",
+  "status": "blocked",
+  "checks": {
+    "opencode_online": "unknown",
+    "hermes_online": "unknown",
+    "agy_online": "unknown",
+    "disk_usage_below_90_percent": "unknown",
+    "memory_pressure_below_80_percent": "unknown",
+    "recent_audit_errors": "unknown"
+  },
+  "reason": "Execution policy previously denied local inspection, and permissions remain unchanged. No new checks were run.",
+  "files_updated": false,
+  "next_action": "Run heartbeat through an authoriz
+
+## 2026-09-22 (Run e631e0ac)
+- Agent: codex
+- Input: Triggered by cron.
+- Output: {
+  "skill": "heartbeat",
+  "status": "blocked",
+  "checks": {
+    "opencode_online": "unknown",
+    "hermes_online": "unknown",
+    "agy_online": "unknown",
+    "disk_usage_below_90_percent": "unknown",
+    "memory_pressure_below_80_percent": "unknown",
+    "recent_audit_errors": "unknown"
+  },
+  "reason": "Prior local inspection commands were rejected by execution policy. Permissions remain unchanged; no new checks were run.",
+  "files_updated": false,
+  "next_action": "Operator intervention i
