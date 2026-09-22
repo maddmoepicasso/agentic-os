@@ -2,22 +2,6 @@
 
 > Older run history was archived to `data/history/skill-learnings`.
 
-## 2026-09-21 (Run 831a787a)
-- Agent: codex
-- Input: Triggered by cron.
-- Output: {
-  "skill": "heartbeat",
-  "status": "blocked",
-  "checks": {
-    "agents_online": {"pass": null, "status": "unverified"},
-    "disk_below_90_percent": {"pass": null, "status": "unverified"},
-    "memory_below_80_percent": {"pass": null, "status": "unverified"},
-    "audit_without_recent_errors": {"pass": null, "status": "unverified"}
-  },
-  "reason": "Prior local execution attempts were denied by policy. No new checks were attempted.",
-  "notes_updated": false,
-  "next_action": "Run heartbeat 
-
 ## 2026-09-21 (Run 023c2cf9)
 - Agent: codex
 - Input: Triggered by cron.
@@ -5008,3 +4992,21 @@
   "reason": "Previous inspection attempts were rejected by execution policy; permissions remain unchanged. No new measurements collected.",
   "files_updated": false,
   "next_action": "Configure the heart
+
+## 2026-09-22 (Run 17ecd3e2)
+- Agent: codex
+- Input: Triggered by cron.
+- Output: {
+  "skill": "heartbeat",
+  "status": "blocked",
+  "checks": {
+    "opencode_online": "unknown",
+    "hermes_online": "unknown",
+    "agy_online": "unknown",
+    "disk_usage_below_90_percent": "unknown",
+    "memory_pressure_below_80_percent": "unknown",
+    "recent_audit_errors": "unknown"
+  },
+  "reason": "Local inspection was previously denied by execution policy; no permission change is present. No new checks were run.",
+  "files_updated": false,
+  "next_action": "An operator must provide a 
