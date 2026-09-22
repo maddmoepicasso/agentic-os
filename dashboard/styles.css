@@ -890,6 +890,7 @@ pre {
   font-weight: 800;
 }
 .agent-live-badge.online { color: var(--green); border-color: var(--green); }
+.agent-live-badge.warning { color: var(--yellow); border-color: var(--yellow); }
 .agent-live-badge.offline { color: var(--red); border-color: var(--red); }
 .modern-chat { min-height: 420px; }
 .agent-composer {
@@ -1569,3 +1570,123 @@ pre {
   0% { background-position: 200% 0; }
   100% { background-position: -200% 0; }
 }
+
+/* Hermes Muse utilities */
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.form-group span {
+  color: var(--text-secondary);
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.clean-list {
+  margin: 0;
+  padding-left: 20px;
+  color: var(--text-secondary);
+  line-height: 1.75;
+}
+
+.quick-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.code-block {
+  margin: 0;
+  padding: 16px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+  white-space: pre-wrap;
+  overflow-x: auto;
+  line-height: 1.55;
+}
+
+@media (max-width: 720px) {
+  .form-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.muse-idea-list,
+.muse-winner-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.muse-idea-card {
+  display: grid;
+  grid-template-columns: 72px minmax(0, 1fr);
+  gap: 14px;
+  padding: 14px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--bg-secondary);
+}
+
+.muse-idea-score {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 64px;
+  border-radius: var(--radius-sm);
+  background: var(--accent-dim);
+  color: var(--accent);
+  font-size: 24px;
+  font-weight: 800;
+}
+
+.muse-idea-body h4 {
+  margin: 0 0 6px;
+  color: var(--text-primary);
+}
+
+.muse-idea-body p {
+  margin: 0 0 6px;
+  color: var(--text-secondary);
+}
+
+.muse-idea-body small {
+  color: var(--text-muted);
+}
+
+.muse-winner-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto auto auto;
+  gap: 12px;
+  align-items: center;
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  color: var(--text-secondary);
+}
+
+.muse-winner-row strong {
+  color: var(--text-primary);
+  min-width: 0;
+}
+
+@media (max-width: 720px) {
+  .muse-idea-card,
+  .muse-winner-row {
+    grid-template-columns: 1fr;
+  }
+}
+
+
+.typing-status { margin-top: 7px; color: var(--text-muted); font-size: 12px; letter-spacing: .01em; }
+#chatSendBtn:disabled { opacity: .55; cursor: wait; }

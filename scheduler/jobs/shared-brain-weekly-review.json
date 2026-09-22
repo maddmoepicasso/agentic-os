@@ -1,0 +1,11 @@
+{
+  "id": "shared-brain-weekly-review",
+  "name": "Shared Brain Weekly Review",
+  "skill": "shared-brain-auto-notes",
+  "cron": "0 7 * * 1",
+  "enabled": true,
+  "created": "2026-09-14T19:10:00Z",
+  "last_run": null,
+  "next_run": null,
+  "description": "Weekly guarded review of Agent OS decisions, tasks, learnings, and handoffs in the local Obsidian vault"
+}

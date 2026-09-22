@@ -48,6 +48,9 @@ class Harness:
     def _redirect_paths(self):
         """Point every module path global at the temp dir."""
         server.BASE_DIR = self.tmp
+        server.MEDIA_DIR = self.tmp / "data" / "media"
+        server.AGENT_HEALTH_PROBES = self.tmp / "data" / "agent-health-probes.json"
+        server.AGENT_CHAT_SESSIONS_FILE = self.tmp / "data" / "agent-chat-sessions.json"
         server.ERROR_LOG_FILE = self.tmp / "data" / "error-log.json"
         server.CIRCUIT_BREAKER_FILE = self.tmp / "data" / "circuit-breaker.json"
         server.CHAT_HISTORY_FILE = self.tmp / "data" / "chat-history.json"
@@ -103,6 +106,22 @@ class Harness:
                         shutil.copytree(item, dst / item.name, dirs_exist_ok=True)
                     elif item.is_file():
                         shutil.copy2(item, dst / item.name)
+
+        # Production defaults intentionally enable Obsidian, but tests must
+        # never fall back to the real user vault. Seed isolated settings so
+        # routes that persist journal/chat/upload events remain inside tmp.
+        (self.tmp / "data" / "settings.json").write_text(
+            json.dumps(
+                {
+                    "obsidian": {
+                        "enabled": True,
+                        "vault_path": str(self.tmp / "obsidian-vault"),
+                    }
+                },
+                indent=2,
+            ),
+            encoding="utf-8",
+        )
 
     # ── lifecycle ─────────────────────────────────────────────
     def start(self):

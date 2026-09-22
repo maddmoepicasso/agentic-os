@@ -3,7 +3,7 @@ const AGENT_PROFILES = {
   kilo: { name: 'Kilo Code', avatar: 'KC', desc: 'Free coding sidecar for implementation and fallback capacity.', accent: '#00d4aa', prompt: 'Use Kilo for coding tasks and quick implementation support.' },
   vscode: { name: 'VS Code', avatar: 'VS', desc: 'Open local projects and developer tools from Agent OS.', accent: '#6c8cff', prompt: 'Ask VS Code to open Agentic OS, PMO AI, or PMO Bot.' },
   opencode: { name: 'opencode', avatar: 'OC', desc: 'Code and DevOps helper for focused tasks.', accent: '#f7b731', prompt: 'Use opencode for concise code and infrastructure support.' },
-  hermes: { name: 'Hermes', avatar: 'HM', desc: 'Memory, scheduling, and personal context agent.', accent: '#fd79a8', prompt: 'Ask Hermes about memory, schedules, and context.' },
+  hermes: { name: 'Hermes', avatar: 'HM', desc: 'Voice, memory, schedules, citations, plugins, webhooks, and A2A coordination.', accent: '#fd79a8', prompt: 'Use Hermes for voice work, grounded research, recurring jobs, memory-aware content operations, and cross-agent coordination.' },
   agy: { name: 'agy', avatar: 'AG', desc: 'Research and analysis route.', accent: '#a55eea', prompt: 'Use agy for research, comparisons, and analysis.' },
 };
 
@@ -64,8 +64,9 @@ async function updateAgentBadge(agent) {
     const badge = document.getElementById('agentLiveBadge');
     if (badge) {
       const state = info ? info.status : 'offline';
+      const badgeState = ['stale', 'degraded', 'paused'].includes(state) ? 'warning' : state;
       badge.textContent = state === 'online' ? 'LIVE' : state.toUpperCase();
-      badge.className = `agent-live-badge ${state}`;
+      badge.className = `agent-live-badge ${badgeState}`;
     }
   } catch {}
 }
@@ -101,6 +102,8 @@ async function sendAgentMessage(agent) {
   const file = fileInput && fileInput.files && fileInput.files[0];
   if (!message && !file) return;
 
+  const sendBtn = document.getElementById('chatSendBtn');
+  if (sendBtn) sendBtn.disabled = true;
   input.value = '';
   input.style.height = 'auto';
   addAgentChatMessage('user', message || `Attached ${file.name}`, agent);
@@ -111,16 +114,20 @@ async function sendAgentMessage(agent) {
   try {
     const response = file
       ? await api.chatWithFile(agent, message, file, controller)
-      : await api.chat(agent, message, controller);
-    clearTimeout(timeoutId);
+      : await api.chatStream(agent, message, controller, event => {
+          if (event.type === 'status') updateAgentTyping(typingId, event.message, event.elapsed_ms);
+        });
     removeTypingIndicator(typingId);
     clearChatAttachment();
-    addAgentChatMessage('assistant', response.response.content, agent);
+    const content = response.response && response.response.content ? response.response.content : 'Agent completed without a text response.';
+    addAgentChatMessage('assistant', response.status === 'error' ? `Error: ${content}` : content, agent);
   } catch (err) {
-    clearTimeout(timeoutId);
     removeTypingIndicator(typingId);
     const msg = err.name === 'AbortError' ? 'Request timed out after 200 seconds.' : err.message;
     addAgentChatMessage('assistant', `Error: ${msg}`, agent);
+  } finally {
+    clearTimeout(timeoutId);
+    if (sendBtn) sendBtn.disabled = false;
   }
 }
 
@@ -158,11 +165,20 @@ function showAgentTyping(agent) {
     <div class="chat-message-body">
       <div class="chat-message-header"><span class="chat-message-agent">${escapeHtml(profile.name)}</span></div>
       <div class="typing-indicator"><span></span><span></span><span></span></div>
+      <div class="typing-status">Connecting…</div>
     </div>
   `;
   container.appendChild(div);
   container.scrollTop = container.scrollHeight;
   return id;
+}
+
+function updateAgentTyping(id, message, elapsedMs = 0) {
+  const el = document.getElementById(id);
+  const status = el && el.querySelector('.typing-status');
+  if (!status) return;
+  const elapsed = elapsedMs >= 1000 ? ` · ${(elapsedMs / 1000).toFixed(0)}s` : '';
+  status.textContent = `${message || 'Working…'}${elapsed}`;
 }
 
 function removeTypingIndicator(id) {

@@ -1,0 +1,11 @@
+{
+  "id": "hermes-muse-restoke",
+  "name": "Hermes Muse Restoke",
+  "skill": "hermes-muse-restoke",
+  "cron": "20 6 * * *",
+  "enabled": true,
+  "created": "2026-09-13T00:00:00Z",
+  "last_run": null,
+  "next_run": null,
+  "description": "Refresh Hermes Muse furnace cache daily at 06:20."
+}

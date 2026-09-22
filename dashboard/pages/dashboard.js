@@ -39,6 +39,7 @@ async function renderDashboard() {
     const skillsCount = status.skills_count || 0;
     const entries = audit.entries || [];
     const online = agents.filter(a => a.status === 'online').length;
+    const needsVerification = agents.filter(a => ['stale', 'degraded', 'paused'].includes(a.status)).length;
 
     document.getElementById('dashStats').innerHTML = `
       <div class="card stat-card">
@@ -53,7 +54,7 @@ async function renderDashboard() {
         </div>
         <div class="stat-value">${online}/${agents.length}</div>
         <div class="stat-label">Agents Online</div>
-        <div class="stat-change ${online === agents.length ? 'up' : 'down'}">${online === agents.length ? 'all operational' : `${agents.length - online} offline`}</div>
+        <div class="stat-change ${online === agents.length ? 'up' : 'down'}">${online === agents.length ? 'all operational' : `${needsVerification} need verification, ${agents.length - online - needsVerification} offline`}</div>
       </div>
       <div class="card stat-card">
         <div class="stat-icon blue">📋</div>
@@ -73,8 +74,9 @@ async function renderDashboard() {
       <div class="agent-card-list">
         ${agents.map(a => {
           const sc = statusColor(a.status);
+          const dotState = a.status === 'online' ? 'online' : (['stale', 'degraded', 'paused'].includes(a.status) ? 'warning' : 'offline');
           return `<div class="agent-card">
-            <div class="agent-dot ${a.status}" style="width:10px;height:10px"></div>
+            <div class="agent-dot ${dotState}" style="width:10px;height:10px"></div>
             <div>
               <div style="font-weight:600;font-size:13px">${a.name}</div>
               <div style="font-size:11px;color:${sc.text}">${a.status}</div>
@@ -119,8 +121,10 @@ async function refreshGatewayStatus() {
   const checks = [
     api.getOmniumStatus().then(data => ({
       name: 'OmniRoute',
-      status: data.active_route === 'omniroute' ? 'online' : 'warning',
-      detail: `${data.active_route || 'unknown'} / ${(data.route && data.route.model) || 'default'}`
+status: data.gateway_live ? 'online' : 'offline',
+      detail: data.gateway_live
+        ? `Gateway live / ${(data.route && data.route.model) || 'default'} / ${data.gateway_latency_ms || 0} ms`
+        : (data.active_route === 'omniroute' ? 'Gateway offline on localhost:20128' : 'Not selected')
     })).catch(err => ({ name: 'OmniRoute', status: 'offline', detail: err.message })),
     cloudflareStatus.then(data => ({
       name: 'Cloudflare',

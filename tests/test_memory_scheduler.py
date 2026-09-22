@@ -121,6 +121,12 @@ class SkillGenerateTests(unittest.TestCase):
         )
         self.assertEqual(status, 400)
 
+    def test_learn_command_is_accepted_by_chat(self):
+        status, data = self.h.api(
+            "POST", "/api/chat", {"agent": "vscode", "message": "/learn"}
+        )
+        self.assertEqual(status, 200)
+        self.assertIn("/learn <URL", data["response"]["content"])
 
 if __name__ == "__main__":
     unittest.main(verbosity=2)

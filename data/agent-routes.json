@@ -196,6 +196,17 @@
     "free_sidecar": "codex",
     "kilo_model": "cloudflare-workers-ai/@cf/moonshotai/kimi-k2.7-code",
     "cloudflare_provider": "cloudflare-workers-ai",
-    "notes": "Prefer Kilo on Cloudflare Workers AI for free/local coding capacity, Hermes for memory/scheduler work, and agy for research. Codex/OmniRoute are fallbacks for complex or explicitly requested work."
+    "optional_routes": {
+      "openrouter-hy3": {
+        "provider": "openrouter",
+        "model": "tencent/hy3:free",
+        "reasoning_effort": "low",
+        "context_window": 262144,
+        "free": true,
+        "rate_limited": true,
+        "requires_env": ["OPENROUTER_API_KEY"]
+      }
+    },
+    "notes": "Prefer Kilo on Cloudflare Workers AI for free/local coding capacity, Hermes for memory/scheduler work, and agy for research. Hy3 is an opt-in OpenRouter comparison lane; do not use it as the default until it passes the Agent OS evaluation suite. Codex/OmniRoute are fallbacks for complex or explicitly requested work."
   }
 }

@@ -49,6 +49,7 @@ A locally-hosted operating system for AI agents — an open-source GitHub reposi
 | **🧠 SQLite FTS5 Memory** | Full-text search across brain, skills, journal with entity extraction |
 | **🤖 Auto-Skill Generator** | `POST /api/skills/generate` — create SKILL.md from natural language |
 | **📱 Mobile PWA** | Bottom navigation bar, manifest.json, service worker, touch-friendly UI |
+| **🚀 GPT 5.6 Full Course** | One guarded workflow for model choice, research, social content, images, reusable prompts, scheduling, video planning, and publishing readiness |
 
 ---
 
@@ -442,4 +443,4 @@ Use it when several agents or terminal checks should run side by side, such as C
 - Dashboard: open **Herdr Sessions** from Monitoring.
 - Windows fallback: run start-herdr-windows.cmd from this folder.
 - Install command: powershell -ExecutionPolicy Bypass -c "irm https://herdr.dev/install.ps1 | iex"
-- Details: docs/herdr-session-runtime.md
+- Details: docs/herdr-session-runtime.md

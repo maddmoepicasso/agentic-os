@@ -14,6 +14,7 @@ const PAGE_TITLES = {
   'agent-agy': { title: 'agy', breadcrumb: 'Research and analysis agent' },
   history: { title: 'Chat History', breadcrumb: 'Review prior agent sessions' },
   'media-studio': { title: 'Media Studio', breadcrumb: 'Generate images and creative assets' },
+  'hermes-muse': { title: 'Hermes Muse', breadcrumb: 'Daily content ideas from your own winning signals' },
   'video-intake': { title: 'Video Intake', breadcrumb: 'Turn YouTube transcripts into implementation briefs' },
   'pmo-ai': { title: 'PMO AI', breadcrumb: 'Kilo-powered PMO AI harness' },
   skills: { title: 'Skills', breadcrumb: 'Installed skills and capabilities' },
@@ -133,6 +134,7 @@ window.addEventListener('DOMContentLoaded', () => {
   updateAgentStatus();
   setInterval(updateAgentStatus, 15000);
 });
+
 
 
 

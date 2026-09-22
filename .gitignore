@@ -33,3 +33,5 @@ data/*.out.log
 data/*.err.log
 data/*.broken-*.bak
 angelic-os-watchdog*.ps1
+data/agent-chat-sessions.json
+data/history/

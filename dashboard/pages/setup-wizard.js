@@ -65,7 +65,7 @@ async function renderWizardStep() {
           <div class="grid grid-2">
             ${agents.map(a => {
               const sc = statusColor(a.status);
-              const safeStatus = ({online:'online',offline:'offline',warning:'warning'})[a.status] || 'offline';
+              const safeStatus = a.status === 'online' ? 'online' : (['stale','degraded','paused','warning'].includes(a.status) ? 'warning' : 'offline');
               return `<div class="agent-card">
                 <div class="agent-dot ${safeStatus}" style="width:14px;height:14px"></div>
                 <div>

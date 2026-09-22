@@ -1,4 +1,4 @@
-﻿const api = {
+const api = {
   async get(path) {
     const r = await fetch(path);
     if (!r.ok) { const e = await r.json().catch(() => ({})); throw new Error(e.detail || `Request failed: ${r.status}`); }
@@ -56,10 +56,48 @@
   saveVideoBrief: (data) => api.post('/api/video-intake/brief', data),
   getVideoBriefs: () => api.get('/api/video-intake/briefs'),
   getSettings: () => api.get('/api/settings'),
+  getHermesMuseStatus: () => api.get('/api/hermes-muse/status'),
+  restokeHermesMuse: () => api.post('/api/hermes-muse/restoke', {}),
+  handoffHermesMuse: (idea_id, target) => api.post('/api/hermes-muse/handoff', { idea_id, target }),
   updateSettings: (settings) => api.put('/api/settings', { settings }),
   getStandards: () => api.get('/api/standards'),
   discoverStandards: () => api.post('/api/standards/discover'),
   chat: (agent, message, controller) => api.post('/api/chat', { agent, message }, controller),
+  chatStream: async (agent, message, controller, onEvent) => {
+    const opts = {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Accept': 'text/event-stream' },
+      body: JSON.stringify({ agent, message }),
+    };
+    if (controller) opts.signal = controller.signal;
+    const r = await fetch('/api/chat/stream', opts);
+    if (!r.ok) {
+      const e = await r.json().catch(() => ({}));
+      throw new Error(e.detail || `Request failed: ${r.status}`);
+    }
+    if (!r.body) throw new Error('Streaming response body is unavailable.');
+    const reader = r.body.getReader();
+    const decoder = new TextDecoder();
+    let buffer = '';
+    let finalEvent = null;
+    while (true) {
+      const { value, done } = await reader.read();
+      buffer += decoder.decode(value || new Uint8Array(), { stream: !done });
+      const chunks = buffer.split('\n\n');
+      buffer = chunks.pop() || '';
+      for (const chunk of chunks) {
+        const line = chunk.split('\n').find(item => item.startsWith('data: '));
+        if (!line) continue;
+        const event = JSON.parse(line.slice(6));
+        if (onEvent) onEvent(event);
+        if (event.type === 'error') throw new Error(event.message || 'Agent request failed.');
+        if (event.type === 'final') finalEvent = event;
+      }
+      if (done) break;
+    }
+    if (!finalEvent) throw new Error('Agent stream ended without a final response.');
+    return finalEvent;
+  },
   chatWithFile: async (agent, message, file, controller) => {
     const form = new FormData();
     form.append('agent', agent);
@@ -137,6 +175,3 @@
   // v0.4.0: Code Diff Viewer
   getDiff: (file, ref = 'HEAD') => api.get(`/api/diff?file=${encodeURIComponent(file)}&ref=${encodeURIComponent(ref)}`),
 };
-
-
-

@@ -303,6 +303,14 @@
       "author": "Codex",
       "installed": "2026-09-13T00:00:00Z",
       "type": "codex-derived"
+    },
+    {
+      "name": "gpt56-full-course",
+      "version": "1.0.0",
+      "description": "Unifies research, content, images, projects, automations, video, and publishing into one guarded GPT 5.6 workflow.",
+      "author": "Agent OS",
+      "installed": "2026-09-14T18:27:38Z",
+      "type": "business-workflow"
     }
   ]
 }
